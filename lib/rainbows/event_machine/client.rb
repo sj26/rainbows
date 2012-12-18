@@ -28,7 +28,7 @@ class Rainbows::EventMachine::Client < EM::Connection
 
   def quit
     super
-    close_connection_after_writing
+    close_connection_after_writing if nil == @deferred
   end
 
   def app_call input
@@ -48,6 +48,7 @@ class Rainbows::EventMachine::Client < EM::Connection
   def deferred_errback(orig_body)
     @deferred.errback do
       orig_body.close if orig_body.respond_to?(:close)
+      @deferred = nil
       quit
     end
   end
@@ -103,7 +104,8 @@ class Rainbows::EventMachine::Client < EM::Connection
 
   def next!
     @deferred.close if @deferred.respond_to?(:close)
-    @hp.keepalive? ? receive_data(@deferred = nil) : quit
+    @deferred = nil
+    @hp.keepalive? ? receive_data(nil) : quit
   end
 
   def unbind
