@@ -41,8 +41,11 @@ class Rainbows::EventMachine::Client < EM::Connection
       APP.call(@env.merge!(RACK_DEFAULTS))
     }
 
-    (nil == status || -1 == status) ? @deferred = true :
+    if (nil == status || -1 == status)
+      @deferred = true
+    else
       ev_write_response(status, headers, body, @hp.next?)
+    end
   end
 
   def deferred_errback(orig_body)
