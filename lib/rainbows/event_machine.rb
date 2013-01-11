@@ -99,6 +99,7 @@ module Rainbows::EventMachine
         end
       end
     }
+    EM.reactor_thread.join if EM.reactor_running?
   end
 end
 # :enddoc:
