@@ -103,8 +103,6 @@ random_blob:
 	dd if=/dev/urandom bs=1M count=30 of=$@.$(pid)
 	mv $@.$(pid) $@
 
-$(T): random_blob
-
 dependencies := socat curl
 deps := $(addprefix .dep+,$(dependencies))
 $(deps): dep_bin = $(lastword $(subst +, ,$@))
@@ -119,7 +117,7 @@ $(libs): test_isolate.rb
 	mkdir -p $(@D)
 	$(RUBY) $< > $@+
 	mv $@+ $@
-t_deps := $(libs) $(deps) $(bin_rainbows) trash/.gitignore
+t_deps := random_blob $(libs) $(deps) $(bin_rainbows) trash/.gitignore
 $(T): $(t_deps)
 
 $(MODEL_T): export model = $(firstword $(subst ., ,$@))
