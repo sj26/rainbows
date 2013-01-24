@@ -102,7 +102,19 @@ module Rainbows::Epoll::Client
     else
       write_response(status, headers, body, alive)
     end
-    on_read(Z) if alive && 0 == @wr_queue.size && 0 != @buf.size
+    # try to read more if we didn't have to buffer writes
+    next_request if alive && 0 == @wr_queue.size
+  end
+
+  def next_request
+    if 0 == @buf.size
+      want_more
+    else
+      # pipelined request (already in buffer)
+      on_read(Z)
+      return if @wr_queue[0] || closed?
+      close if :close == @state
+    end
   end
 
   def epoll_run
@@ -120,7 +132,7 @@ module Rainbows::Epoll::Client
 
   def on_deferred_write_complete
     :close == @state and return close
-    0 == @buf.size ? on_readable : on_read(Z)
+    next_request
   end
 
   def handle_error(e)
