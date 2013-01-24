@@ -25,12 +25,12 @@ t_begin "setup and start" && {
 }
 
 t_begin "send async requests off in parallel" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	( curl --no-buffer -sSf http://$listen/ 2>> $curl_err | tee $a) &
 	( curl --no-buffer -sSf http://$listen/ 2>> $curl_err | tee $b) &
 	( curl --no-buffer -sSf http://$listen/ 2>> $curl_err | tee $c) &
 	wait
-	t1=$(date +%s)
+	t1=$(unix_time)
 }
 
 t_begin "ensure elapsed requests were processed in parallel" && {

@@ -38,6 +38,11 @@ require_check () {
 	fi
 }
 
+# "date +%s" is not in POSIX, but in GNU, and FreeBSD 9.0 (possibly earlier)
+unix_time () {
+	$RUBY -e 'puts Time.now.to_i'
+}
+
 skip_models () {
 	for i in "$@"
 	do

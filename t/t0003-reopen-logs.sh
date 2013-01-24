@@ -17,7 +17,7 @@ t_begin "ensure server is responsive" && {
 }
 
 t_begin "start $nr_client concurrent requests" && {
-	start=$(date +%s)
+	start=$(unix_time)
 	for i in $(awk "BEGIN{for(i=0;i<$nr_client;++i) print i}" </dev/null)
 	do
 		( curl -sSf http://$listen/2 >> $curl_out 2>> $curl_err ) &
@@ -59,7 +59,7 @@ dbgcat r_err
 
 t_begin "wait curl requests to finish" && {
 	wait
-	t_info elapsed=$(( $(date +%s) - $start ))
+	t_info elapsed=$(( $(unix_time) - $start ))
 }
 
 t_begin "ensure no errors from curl" && {

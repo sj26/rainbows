@@ -27,7 +27,7 @@ t_begin "setup and start" && {
 }
 
 t_begin "send async requests off in parallel" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	curl --no-buffer -sSf http://$listen/ > $a 2>> $curl_err &
 	curl_a=$!
 	curl --no-buffer -sSf http://$listen/ > $b 2>> $curl_err &
@@ -49,7 +49,7 @@ t_begin "generate log output" && {
 t_begin "kill curls and wait for termination" && {
 	kill $curl_a $curl_b $curl_c
 	wait
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed"
 }

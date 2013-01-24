@@ -32,7 +32,7 @@ check () {
 		i=0
 		while read hello world
 		do
-			t1=$(date +%s)
+			t1=$(unix_time)
 			diff=$(($t1 - $t0))
 			t_info "i=$i diff=$diff hello=$hello world=$world"
 			test $diff -ge 1 || echo "$i: diff: $diff < 1 second"
@@ -46,7 +46,7 @@ check () {
 }
 
 t_begin "send async requests off in parallel" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	curl --no-buffer -sSf http://$listen/ 2>> $curl_err | check >$a 2>&1 &
 	curl --no-buffer -sSf http://$listen/ 2>> $curl_err | check >$b 2>&1 &
 	curl --no-buffer -sSf http://$listen/ 2>> $curl_err | check >$c 2>&1 &
@@ -54,7 +54,7 @@ t_begin "send async requests off in parallel" && {
 
 t_begin "wait for curl terminations" && {
 	wait
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed (should be 4-5s)"
 }

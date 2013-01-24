@@ -28,7 +28,7 @@ t_begin "setup and start" && {
 
 t_begin "async.callback supports pipelining" && {
 	rm -f $tmp
-	t0=$(date +%s)
+	t0=$(unix_time)
 	(
 		cat $fifo > $tmp &
 		printf 'GET /0 HTTP/1.1\r\nHost: example.com\r\n\r\n'
@@ -36,7 +36,7 @@ t_begin "async.callback supports pipelining" && {
 		printf 'GET /2 HTTP/1.0\r\nHost: example.com\r\n\r\n'
 		wait
 	) | socat - TCP:$listen > $fifo
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
 	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | wc -l)"
@@ -46,7 +46,7 @@ t_begin "async.callback supports pipelining" && {
 
 t_begin "async.callback supports delayed pipelining" && {
 	rm -f $tmp
-	t0=$(date +%s)
+	t0=$(unix_time)
 	(
 		cat $fifo > $tmp &
 		printf 'GET /0 HTTP/1.1\r\nHost: example.com\r\n\r\n'
@@ -56,7 +56,7 @@ t_begin "async.callback supports delayed pipelining" && {
 		printf 'GET /2 HTTP/1.0\r\nHost: example.com\r\n\r\n'
 		wait
 	) | socat - TCP:$listen > $fifo
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
 	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | wc -l)"
@@ -66,7 +66,7 @@ t_begin "async.callback supports delayed pipelining" && {
 
 t_begin "async.callback supports pipelining with delay $DELAY" && {
 	rm -f $tmp
-	t0=$(date +%s)
+	t0=$(unix_time)
 	(
 		cat $fifo > $tmp &
 		printf 'GET /0 HTTP/1.1\r\nX-Delay: %d\r\n' $DELAY
@@ -77,7 +77,7 @@ t_begin "async.callback supports pipelining with delay $DELAY" && {
 		printf 'Host: example.com\r\n\r\n'
 		wait
 	) | socat - TCP:$listen > $fifo
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	min=$(( $DELAY * 3 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current) min=$min"
@@ -88,9 +88,9 @@ t_begin "async.callback supports pipelining with delay $DELAY" && {
 }
 
 t_begin "async.callback supports keepalive" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	curl -v --no-buffer -sSf http://$listen/[0-2] > $tmp 2>> $curl_err
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
 	cmp $expect $tmp
@@ -99,10 +99,10 @@ t_begin "async.callback supports keepalive" && {
 }
 
 t_begin "async.callback supports keepalive with delay $DELAY" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	curl -v --no-buffer -sSf -H "X-Delay: $DELAY" \
 	  http://$listen/[0-2] > $tmp 2>> $curl_err
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	min=$(( $DELAY * 3 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current) min=$min"
@@ -113,7 +113,7 @@ t_begin "async.callback supports keepalive with delay $DELAY" && {
 }
 
 t_begin "send async requests off in parallel" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	curl --no-buffer -sSf http://$listen/[0-2] > $a 2>> $curl_err &
 	curl --no-buffer -sSf http://$listen/[0-2] > $b 2>> $curl_err &
 	curl --no-buffer -sSf http://$listen/[0-2] > $c 2>> $curl_err &
@@ -121,7 +121,7 @@ t_begin "send async requests off in parallel" && {
 
 t_begin "wait for curl terminations" && {
 	wait
-	t1=$(date +%s)
+	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed"
 }

@@ -33,13 +33,13 @@ t_begin "wait for response" && {
 }
 
 t_begin "stop Rainbows! gracefully" && {
-	t0=$(date +%s)
+	t0=$(unix_time)
 	kill -QUIT $rainbows_pid
 }
 
 t_begin "keepalive client disconnected quickly" && {
 	wait
-	diff=$(( $(date +%s) - $t0 ))
+	diff=$(( $(unix_time) - $t0 ))
 	test $diff -le 2 || die "client diff=$diff > 2"
 }
 
@@ -48,7 +48,7 @@ t_begin "wait for termination" && {
 	do
 		sleep 1
 	done
-	diff=$(( $(date +%s) - $t0 ))
+	diff=$(( $(unix_time) - $t0 ))
 	test $diff -le 4 || die "server diff=$diff > 4"
 }
 

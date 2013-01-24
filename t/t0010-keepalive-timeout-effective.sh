@@ -16,12 +16,12 @@ t_begin 'check server up' && {
 
 t_begin "send keepalive response that does not expect close" && {
 	req='GET / HTTP/1.1\r\nHost: example.com\r\n\r\n'
-	t0=$(date +%s)
+	t0=$(unix_time)
 	(
 		cat $fifo > $tmp &
 		printf "$req"
 		wait
-		date +%s > $ok
+		unix_time > $ok
 	) | socat - TCP:$listen > $fifo
 	now="$(cat $ok)"
 	elapsed=$(( $now - $t0 ))

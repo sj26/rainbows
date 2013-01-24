@@ -17,7 +17,7 @@ t_begin "setup and startup" && {
 }
 
 t_begin "send $nr_client concurrent requests" && {
-	start=$(date +%s)
+	start=$(unix_time)
 	for i in $(awk "BEGIN{for(i=0;i<$nr_client;++i) print i}" </dev/null)
 	do
 		(
@@ -26,7 +26,7 @@ t_begin "send $nr_client concurrent requests" && {
 		) &
 	done
 	wait
-	t_info elapsed=$(( $(date +%s) - $start ))
+	t_info elapsed=$(( $(unix_time) - $start ))
 }
 
 t_begin "kill server" && kill $rainbows_pid

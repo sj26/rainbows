@@ -19,14 +19,14 @@ t_begin "configure and start" && {
 }
 
 t_begin "launch $nr_client requests" && {
-	start=$(date +%s)
+	start=$(unix_time)
 	seq="$(awk "BEGIN{for(i=0;i<$nr_client;++i) print i}" </dev/null)"
 	for i in $seq
 	do
 		curl -sSf http://$listen/ >> $curl_out 2>> $curl_err &
 	done
 	wait
-	t_info elapsed=$(( $(date +%s) - $start ))
+	t_info elapsed=$(( $(unix_time) - $start ))
 }
 
 t_begin "kill server" && {
