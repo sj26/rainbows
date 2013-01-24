@@ -19,7 +19,7 @@ EOF
 
 t_begin "read random blob sha1 and size" && {
 	random_blob_sha1=$(rsha1 < random_blob)
-	random_blob_size=$(wc -c < random_blob)
+	random_blob_size=$(count_bytes < random_blob)
 }
 
 t_begin "send a series HTTP/1.1 requests sequentially" && {

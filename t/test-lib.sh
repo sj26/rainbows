@@ -43,6 +43,11 @@ unix_time () {
 	$RUBY -e 'puts Time.now.to_i'
 }
 
+# "wc -c" outputs leading whitespace on *BSDs, filter it out for portability
+count_bytes () {
+	wc -c | tr -d '[:space:]'
+}
+
 skip_models () {
 	for i in "$@"
 	do

@@ -40,7 +40,7 @@ t_begin "X-Sendfile does not show up in headers" && {
 }
 
 t_begin "Content-Length is set correctly in headers" && {
-	expect=$(wc -c < random_blob)
+	expect=$(count_bytes < random_blob)
 	grep "^< Content-Length: $expect" $curl_err
 }
 

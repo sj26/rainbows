@@ -1,5 +1,5 @@
 t_begin "byte-range setup vars" && {
-	random_blob_size=$(wc -c < random_blob)
+	random_blob_size=$(count_bytes < random_blob)
 	rb_1=$(( $random_blob_size - 1 ))
 	range_head=-r-365
 	range_tail=-r155-

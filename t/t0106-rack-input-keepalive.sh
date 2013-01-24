@@ -8,9 +8,9 @@ t_begin "setup and startup" && {
 	rtmpfiles req
 	rainbows -D sha1.ru -c $unicorn_config
 	body=hello
-	body_size=$(printf $body | wc -c)
+	body_size=$(printf $body | count_bytes)
 	body_sha1=$(printf $body | rsha1)
-	random_blob_size=$(wc -c < random_blob)
+	random_blob_size=$(count_bytes < random_blob)
 	random_blob_sha1=$(rsha1 < random_blob)
 	rainbows_wait_start
 }
