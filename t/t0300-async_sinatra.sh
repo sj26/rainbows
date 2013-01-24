@@ -25,9 +25,9 @@ t_begin "setup and start" && {
 
 t_begin "send async requests off in parallel" && {
 	t0=$(date +%s)
-	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | utee $a) &
-	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | utee $b) &
-	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | utee $c) &
+	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | tee $a) &
+	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | tee $b) &
+	( curl --no-buffer -sSf http://$listen/$n 2>> $curl_err | tee $c) &
 }
 
 t_begin "ensure elapsed requests were processed in parallel" && {

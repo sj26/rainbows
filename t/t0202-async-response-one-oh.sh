@@ -18,9 +18,9 @@ t_begin "setup and start" && {
 t_begin "send async requests off in parallel" && {
 	t0=$(date +%s)
 	curl="curl -0 --no-buffer -vsSf http://$listen/"
-	( $curl 2>> $a_err | utee $a) &
-	( $curl 2>> $b_err | utee $b) &
-	( $curl 2>> $c_err | utee $c) &
+	( $curl 2>> $a_err | tee $a) &
+	( $curl 2>> $b_err | tee $b) &
+	( $curl 2>> $c_err | tee $c) &
 	wait
 	t1=$(date +%s)
 }
