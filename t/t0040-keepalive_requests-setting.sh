@@ -13,8 +13,8 @@ t_begin "setup and start" && {
 
 t_begin "curl requests hit default keepalive_requests limit" && {
 	curl -sSfv http://$listen/[0-101] > $curl_out 2> $curl_err
-	test 1 -eq $(grep 'Connection: close' $curl_err |wc -l)
-	test 101 -eq $(grep 'Connection: keep-alive' $curl_err |wc -l)
+	test 1 -eq $(grep 'Connection: close' $curl_err |count_lines)
+	test 101 -eq $(grep 'Connection: keep-alive' $curl_err |count_lines)
 }
 
 t_begin "reload with smaller keepalive_requests limit" && {
@@ -32,8 +32,8 @@ EOF
 t_begin "curl requests hit smaller keepalive_requests limit" && {
 	rm -f $curl_out $curl_err
 	curl -sSfv http://$listen/[1-13] > $curl_out 2> $curl_err
-	test 2 -eq $(grep 'Connection: close' $curl_err |wc -l)
-	test 11 -eq $(grep 'Connection: keep-alive' $curl_err |wc -l)
+	test 2 -eq $(grep 'Connection: close' $curl_err |count_lines)
+	test 11 -eq $(grep 'Connection: keep-alive' $curl_err |count_lines)
 }
 
 t_begin "killing succeeds" && {

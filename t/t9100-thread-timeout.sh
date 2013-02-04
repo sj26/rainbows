@@ -37,7 +37,7 @@ t_begin "short requests do not timeout while making a long one" && {
 	test x"HI" = x"$(curl -sSf http://$listen/)"
 	wait
 	test -f $ok
-	test 20 -eq $(grep '^HI$' $ok | wc -l)
+	test 20 -eq $(grep '^HI$' $ok | count_lines)
 	test x = x"$(grep -v '^HI$' $ok)"
 	grep 408 $curl_err
 }

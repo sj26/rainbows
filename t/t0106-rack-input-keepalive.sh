@@ -34,7 +34,7 @@ t_begin "send big pipelined chunked requests" && {
 
 t_begin "check responses" && {
 	dbgcat tmp
-	test 4 -eq $(grep $random_blob_sha1 $tmp | wc -l)
+	test 4 -eq $(grep $random_blob_sha1 $tmp | count_lines)
 }
 
 t_begin "send big pipelined identity requests" && {
@@ -58,7 +58,7 @@ t_begin "send big pipelined identity requests" && {
 
 t_begin "check responses" && {
 	dbgcat tmp
-	test 3 -eq $(grep $random_blob_sha1 $tmp | wc -l)
+	test 3 -eq $(grep $random_blob_sha1 $tmp | count_lines)
 }
 
 t_begin "send pipelined identity requests" && {
@@ -83,7 +83,7 @@ t_begin "send pipelined identity requests" && {
 
 t_begin "check responses" && {
 	dbgcat tmp
-	test 3 -eq $(grep $body_sha1 $tmp | wc -l)
+	test 3 -eq $(grep $body_sha1 $tmp | count_lines)
 }
 
 t_begin "send pipelined chunked requests" && {
@@ -111,7 +111,7 @@ t_begin "send pipelined chunked requests" && {
 
 t_begin "check responses" && {
 	dbgcat tmp
-	test 3 -eq $(grep $body_sha1 $tmp | wc -l)
+	test 3 -eq $(grep $body_sha1 $tmp | count_lines)
 }
 
 t_begin "kill server" && kill $rainbows_pid

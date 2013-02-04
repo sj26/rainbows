@@ -37,7 +37,7 @@ start_strace () {
 
 check_TCP_CORK () {
 	nr=0
-	while test 2 -gt $(grep TCP_CORK $strace_out | wc -l)
+	while test 2 -gt $(grep TCP_CORK $strace_out | count_lines)
 	do
 		nr=$(( $nr + 1 ))
 		if test $nr -gt 30
@@ -48,7 +48,7 @@ check_TCP_CORK () {
 		sleep 1
 	done
 
-	test 2 -eq $(grep TCP_CORK $strace_out | wc -l)
+	test 2 -eq $(grep TCP_CORK $strace_out | count_lines)
 	fgrep 'SOL_TCP, TCP_CORK, [0],' $strace_out
 	fgrep 'SOL_TCP, TCP_CORK, [1],' $strace_out
 }

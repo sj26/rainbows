@@ -62,7 +62,7 @@ t_begin "staggered pipeline of 3 HTTP requests" && {
 		wait
 		echo ok >> $ok
 	) | socat - TCP:$listen > $dd_fifo
-	test 2 -eq $(grep '^ok$' $ok |wc -l)
+	test 2 -eq $(grep '^ok$' $ok |count_lines)
 }
 
 t_begin "pipeline 3 HTTP requests" && {
@@ -77,7 +77,7 @@ t_begin "pipeline 3 HTTP requests" && {
 		wait
 		echo ok >> $ok
 	) | socat - TCP:$listen > $fifo
-	test 2 -eq $(grep '^ok$' $ok |wc -l)
+	test 2 -eq $(grep '^ok$' $ok |count_lines)
 }
 
 t_begin "shutdown server" && {

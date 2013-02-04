@@ -25,8 +25,8 @@ t_begin "synchronous requests run in the same thread" && {
 	curl --no-buffer -sSf http://$listen/ >> $sync_out 2>> $sync_err &
 	wait
 	test ! -s $sync_err
-	test 3 -eq "$(wc -l < $sync_out)"
-	test 1 -eq "$(uniq < $sync_out | wc -l)"
+	test 3 -eq "$(count_lines < $sync_out)"
+	test 1 -eq "$(uniq < $sync_out | count_lines)"
 }
 
 t_begin "deferred requests run in a different thread" && {

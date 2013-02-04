@@ -35,7 +35,7 @@ t_begin "send three keep-alive requests" && {
 }
 
 t_begin "ensure responses were all keep-alive" && {
-	test 3 -eq $(grep '< Connection: keep-alive' < $err | wc -l)
+	test 3 -eq $(grep '< Connection: keep-alive' < $err | count_lines)
 }
 
 t_begin "HTTP/1.0 test" && {

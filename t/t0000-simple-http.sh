@@ -60,19 +60,19 @@ t_begin "pipelining partial requests" && {
 dbgcat tmp
 
 t_begin "two HTTP/1.1 responses" && {
-	test 2 -eq $(grep '^HTTP/1.1' $tmp | wc -l)
+	test 2 -eq $(grep '^HTTP/1.1' $tmp | count_lines)
 }
 
 t_begin "two HTTP/1.1 200 OK responses" && {
-	test 2 -eq $(grep '^HTTP/1.1 200 OK' $tmp | wc -l)
+	test 2 -eq $(grep '^HTTP/1.1 200 OK' $tmp | count_lines)
 }
 
 t_begin 'one "Connection: keep-alive" response' && {
-	test 1 -eq $(grep '^Connection: keep-alive' $tmp | wc -l)
+	test 1 -eq $(grep '^Connection: keep-alive' $tmp | count_lines)
 }
 
 t_begin 'one "Connection: close" response' && {
-	test 1 -eq $(grep '^Connection: close' $tmp | wc -l)
+	test 1 -eq $(grep '^Connection: close' $tmp | count_lines)
 }
 
 t_begin 'check subshell success' && {
@@ -98,19 +98,19 @@ dbgcat tmp
 dbgcat r_err
 
 t_begin "got 2 HTTP/1.1 responses from pipelining" && {
-	test 2 -eq $(grep '^HTTP/1.1' $tmp | wc -l)
+	test 2 -eq $(grep '^HTTP/1.1' $tmp | count_lines)
 }
 
 t_begin "got 2 HTTP/1.1 200 OK responses" && {
-	test 2 -eq $(grep '^HTTP/1.1 200 OK' $tmp | wc -l)
+	test 2 -eq $(grep '^HTTP/1.1 200 OK' $tmp | count_lines)
 }
 
 t_begin "one keepalive connection" && {
-	test 1 -eq $(grep '^Connection: keep-alive' $tmp | wc -l)
+	test 1 -eq $(grep '^Connection: keep-alive' $tmp | count_lines)
 }
 
 t_begin "second request closes connection" && {
-	test 1 -eq $(grep '^Connection: close' $tmp | wc -l)
+	test 1 -eq $(grep '^Connection: close' $tmp | count_lines)
 }
 
 t_begin "subshell exited correctly" && {
@@ -134,7 +134,7 @@ dbgcat tmp
 dbgcat r_err
 
 t_begin "env.inspect should've put everything on one line" && {
-	test 1 -eq $(wc -l < $tmp)
+	test 1 -eq $(count_lines < $tmp)
 }
 
 t_begin "no headers in output" && {

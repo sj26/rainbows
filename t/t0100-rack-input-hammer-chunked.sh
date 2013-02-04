@@ -32,11 +32,11 @@ t_begin "send $nr_client concurrent requests" && {
 t_begin "kill server" && kill $rainbows_pid
 
 t_begin "got $nr_client responses" && {
-	test $nr_client -eq $(wc -l < $curl_out)
+	test $nr_client -eq $(count_lines < $curl_out)
 }
 
 t_begin "all responses identical" && {
-	test 1 -eq $(sort < $curl_out | uniq | wc -l)
+	test 1 -eq $(sort < $curl_out | uniq | count_lines)
 }
 
 t_begin "sha1 matches on-disk sha1" && {

@@ -43,7 +43,7 @@ t_begin "no errors from curl" && {
 t_begin "no errors in stderr" && check_stderr
 
 t_begin "ensure we hit 3 separate fibers" && {
-	test x3 = x"$(sort < $curl_out | uniq | wc -l)"
+	test x3 = x"$(sort < $curl_out | uniq | count_lines)"
 }
 
 t_done

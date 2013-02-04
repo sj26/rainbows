@@ -54,7 +54,7 @@ t_begin "smallest HTTP/0.9 request works right" && {
 	) | socat - TCP:$listen > $fifo
 	wait
 	test xok = x"$(cat $ok)"
-	test 1 -eq $(wc -l < $tmp)
+	test 1 -eq $(count_lines < $tmp)
 	grep HTTP_VERSION $tmp && die "unexpected HTTP_VERSION in HTTP/0.9 request"
 }
 
@@ -75,7 +75,7 @@ EOF
 
 t_begin "HTTP/1.1 request succeeds" && {
 	curl -sSf http://$listen/ > $tmp
-	test 1 -eq $(wc -l < $tmp)
+	test 1 -eq $(count_lines < $tmp)
 	dbgcat tmp
 }
 

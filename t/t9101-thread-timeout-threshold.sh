@@ -23,7 +23,7 @@ t_begin "8 sleepy requests do not time out" && {
 		  2>> $curl_err >> $curl_out &
 	done
 	wait
-	test 8 -eq "$(wc -l < $curl_out)"
+	test 8 -eq "$(count_lines < $curl_out)"
 	test xHI = x"$(sort < $curl_out | uniq)"
 }
 

@@ -67,11 +67,11 @@ t_begin "ensure no errors from curl" && {
 }
 
 t_begin "curl got $nr_client responses" && {
-	test "$(wc -l < $curl_out)" -eq $nr_client
+	test "$(count_lines < $curl_out)" -eq $nr_client
 }
 
 t_begin "all responses were identical" && {
-	nr=$(sort < $curl_out | uniq | wc -l)
+	nr=$(sort < $curl_out | uniq | count_lines)
 	test "$nr" -eq 1
 }
 

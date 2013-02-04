@@ -34,7 +34,7 @@ t_begin "kill server" && {
 }
 
 t_begin "$APP_POOL_SIZE instances of app were used" && {
-	test $APP_POOL_SIZE -eq $(sort < $curl_out | uniq | wc -l)
+	test $APP_POOL_SIZE -eq $(sort < $curl_out | uniq | count_lines)
 }
 
 t_begin "no errors in curl stderr" && {

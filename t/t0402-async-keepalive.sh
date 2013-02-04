@@ -39,9 +39,9 @@ t_begin "async.callback supports pipelining" && {
 	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
-	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | wc -l)"
-	test 3 -eq "$(grep '^Hello ' $tmp | wc -l)"
-	test 3 -eq "$(grep 'World ' $tmp | wc -l)"
+	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | count_lines)"
+	test 3 -eq "$(grep '^Hello ' $tmp | count_lines)"
+	test 3 -eq "$(grep 'World ' $tmp | count_lines)"
 }
 
 t_begin "async.callback supports delayed pipelining" && {
@@ -59,9 +59,9 @@ t_begin "async.callback supports delayed pipelining" && {
 	t1=$(unix_time)
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
-	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | wc -l)"
-	test 3 -eq "$(grep '^Hello ' $tmp | wc -l)"
-	test 3 -eq "$(grep 'World ' $tmp | wc -l)"
+	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | count_lines)"
+	test 3 -eq "$(grep '^Hello ' $tmp | count_lines)"
+	test 3 -eq "$(grep 'World ' $tmp | count_lines)"
 }
 
 t_begin "async.callback supports pipelining with delay $DELAY" && {
@@ -82,9 +82,9 @@ t_begin "async.callback supports pipelining with delay $DELAY" && {
 	min=$(( $DELAY * 3 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current) min=$min"
 	test $elapsed -ge $min
-	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | wc -l)"
-	test 3 -eq "$(grep '^Hello ' $tmp | wc -l)"
-	test 3 -eq "$(grep 'World ' $tmp | wc -l)"
+	test 3 -eq "$(fgrep 'HTTP/1.1 200 OK' $tmp | count_lines)"
+	test 3 -eq "$(grep '^Hello ' $tmp | count_lines)"
+	test 3 -eq "$(grep 'World ' $tmp | count_lines)"
 }
 
 t_begin "async.callback supports keepalive" && {
@@ -94,7 +94,7 @@ t_begin "async.callback supports keepalive" && {
 	elapsed=$(( $t1 - $t0 ))
 	t_info "elapsed=$elapsed $model.$0 ($t_current)"
 	cmp $expect $tmp
-	test 2 -eq "$(fgrep 'Re-using existing connection!' $curl_err |wc -l)"
+	test 2 -eq "$(fgrep 'Re-using existing connection!' $curl_err |count_lines)"
 	rm -f $curl_err
 }
 
@@ -108,7 +108,7 @@ t_begin "async.callback supports keepalive with delay $DELAY" && {
 	t_info "elapsed=$elapsed $model.$0 ($t_current) min=$min"
 	test $elapsed -ge $min
 	cmp $expect $tmp
-	test 2 -eq "$(fgrep 'Re-using existing connection!' $curl_err |wc -l)"
+	test 2 -eq "$(fgrep 'Re-using existing connection!' $curl_err |count_lines)"
 	rm -f $curl_err
 }
 
