@@ -19,23 +19,56 @@ module Rainbows::Response
       Rainbows::HttpParser.keepalive_requests = 0
   end
 
-  def write_headers(status, headers, alive)
-    @hp.headers? or return
+  # Rack 1.5.0 (protocol version 1.2) adds response hijacking support
+  if ((Rack::VERSION[0] << 8) | Rack::VERSION[1]) >= 0x0102
+    RACK_HIJACK = "rack.hijack"
+
+    def hijack_prepare(value)
+      value
+    end
+
+    def hijack_socket
+      @hp.env[RACK_HIJACK].call
+    end
+  else
+    def hijack_prepare(_)
+    end
+  end
+
+  # returns the original body on success
+  # returns nil if the headers hijacked the response body
+  def write_headers(status, headers, alive, body)
+    @hp.headers? or return body
+    hijack = nil
     status = CODES[status.to_i] || status
     buf = "HTTP/1.1 #{status}\r\n" \
           "Date: #{httpdate}\r\n" \
-          "Status: #{status}\r\n" \
-          "Connection: #{alive ? KeepAlive : Close}\r\n"
+          "Status: #{status}\r\n"
     headers.each do |key, value|
-      next if %r{\A(?:Date\z|Connection\z)}i =~ key
-      if value =~ /\n/
-        # avoiding blank, key-only cookies with /\n+/
-        buf << value.split(/\n+/).map! { |v| "#{key}: #{v}\r\n" }.join
+      case key
+      when %r{\A(?:Date\z|Connection\z)}i
+        next
+      when "rack.hijack"
+        # this was an illegal key in Rack < 1.5, so it should be
+        # OK to silently discard it for those older versions
+        hijack = hijack_prepare(value)
+        alive = false # No persistent connections for hijacking
       else
-        buf << "#{key}: #{value}\r\n"
+        if /\n/ =~ value
+          # avoiding blank, key-only cookies with /\n+/
+          buf << value.split(/\n+/).map! { |v| "#{key}: #{v}\r\n" }.join
+        else
+          buf << "#{key}: #{value}\r\n"
+        end
       end
     end
-    write(buf << CRLF)
+    write(buf << "Connection: #{alive ? KeepAlive : Close}\r\n\r\n")
+
+    if hijack
+      body = nil # ensure caller does not close body
+      hijack.call(hijack_socket)
+    end
+    body
   end
 
   def close_if_private(io)
@@ -70,8 +103,9 @@ module Rainbows::Response
     # generic response writer, used for most dynamically-generated responses
     # and also when copy_stream and/or IO#trysendfile is unavailable
     def write_response(status, headers, body, alive)
-      write_headers(status, headers, alive)
-      write_body_each(body)
+      body = write_headers(status, headers, alive, body)
+      write_body_each(body) if body
+      body
       ensure
         body.close if body.respond_to?(:close)
     end
@@ -166,21 +200,23 @@ module Rainbows::Response
       if File.file?(body.to_path)
         if r = sendfile_range(status, headers)
           status, headers, range = r
-          write_headers(status, headers, alive)
-          write_body_file(body, range) if range
+          body = write_headers(status, headers, alive, body)
+          write_body_file(body, range) if body && range
         else
-          write_headers(status, headers, alive)
-          write_body_file(body, nil)
+          body = write_headers(status, headers, alive, body)
+          write_body_file(body, nil) if body
         end
       else
-        write_headers(status, headers, alive)
-        write_body_stream(body)
+        body = write_headers(status, headers, alive, body)
+        write_body_stream(body) if body
       end
+      body
       ensure
         body.close if body.respond_to?(:close)
     end
 
     module ToPath
+      # returns nil if hijacked
       def write_response(status, headers, body, alive)
         if body.respond_to?(:to_path)
           write_response_path(status, headers, body, alive)

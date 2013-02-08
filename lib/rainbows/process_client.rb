@@ -40,6 +40,7 @@ module Rainbows::ProcessClient
 
       set_input(env, hp)
       env[REMOTE_ADDR] = kgio_addr
+      hp.hijack_setup(env, to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
 
       if 100 == status.to_i
@@ -47,7 +48,8 @@ module Rainbows::ProcessClient
         env.delete(HTTP_EXPECT)
         status, headers, body = APP.call(env)
       end
-      write_response(status, headers, body, alive = @hp.next?)
+      return if hp.hijacked?
+      write_response(status, headers, body, alive = hp.next?) or return
     end while alive
   # if we get any error, try to write something back to the client
   # assuming we haven't closed the socket, but don't get hung up
@@ -56,7 +58,7 @@ module Rainbows::ProcessClient
   rescue => e
     handle_error(e)
   ensure
-    close unless closed?
+    close unless closed? || hp.hijacked?
   end
 
   def handle_error(e)
@@ -71,13 +73,15 @@ module Rainbows::ProcessClient
     begin
       set_input(env, hp)
       env[REMOTE_ADDR] = kgio_addr
+      hp.hijack_setup(env, to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
       if 100 == status.to_i
         write(EXPECT_100_RESPONSE)
         env.delete(HTTP_EXPECT)
         status, headers, body = APP.call(env)
       end
-      write_response(status, headers, body, alive = hp.next?)
+      return if hp.hijacked?
+      write_response(status, headers, body, alive = hp.next?) or return
     end while alive && pipeline_ready(hp)
     alive or close
     rescue => e

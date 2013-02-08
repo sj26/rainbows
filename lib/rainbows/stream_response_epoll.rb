@@ -26,18 +26,24 @@ module Rainbows::StreamResponseEpoll
 
   def http_response_write(socket, status, headers, body)
     status = CODES[status.to_i] || status
-    ep_client = false
+    hijack = ep_client = false
 
     if headers
       # don't set extra headers here, this is only intended for
       # consuming by nginx.
       buf = "HTTP/1.0 #{status}\r\nStatus: #{status}\r\n"
       headers.each do |key, value|
-        if value =~ /\n/
-          # avoiding blank, key-only cookies with /\n+/
-          buf << value.split(/\n+/).map! { |v| "#{key}: #{v}\r\n" }.join
+        case key
+        when "rack.hijack"
+          hijack = hijack_prepare(value)
+          body = nil # ensure we do not close body
         else
-          buf << "#{key}: #{value}\r\n"
+          if /\n/ =~ value
+            # avoiding blank, key-only cookies with /\n+/
+            buf << value.split(/\n+/).map! { |v| "#{key}: #{v}\r\n" }.join
+          else
+            buf << "#{key}: #{value}\r\n"
+          end
         end
       end
       buf << HEADER_END
@@ -48,9 +54,20 @@ module Rainbows::StreamResponseEpoll
         buf = rv
       when :wait_writable
         ep_client = Client.new(socket, buf)
-        body.each { |chunk| ep_client.write(chunk) }
-        return ep_client.close
+        if hijack
+          ep_client.hijack(hijack)
+        else
+          body.each { |chunk| ep_client.write(chunk) }
+          ep_client.close
+        end
+        # body is nil on hijack, in which case ep_client is never closed by us
+        return
       end while true
+    end
+
+    if hijack
+      hijack.call(socket)
+      return
     end
 
     body.each do |chunk|
@@ -67,14 +84,15 @@ module Rainbows::StreamResponseEpoll
         end while true
       end
     end
-    ensure
-      body.respond_to?(:close) and body.close
-      if ep_client
-        ep_client.close
-      else
-        socket.shutdown
-        socket.close
-      end
+  ensure
+    return if hijack
+    body.respond_to?(:close) and body.close
+    if ep_client
+      ep_client.close
+    else
+      socket.shutdown
+      socket.close
+    end
   end
 
   # once a client is accepted, it is processed in its entirety here
@@ -88,6 +106,7 @@ module Rainbows::StreamResponseEpoll
       status, headers, body = @app.call(env)
     end
     @request.headers? or headers = nil
+    return if @request.hijacked?
     http_response_write(client, status, headers, body)
   rescue => e
     handle_error(client, e)

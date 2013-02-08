@@ -86,6 +86,12 @@ class Rainbows::Coolio::Client < Coolio::IO
     @deferred = true
   end
 
+  def hijacked
+    CONN.delete(self)
+    detach
+    nil
+  end
+
   def write_response_path(status, headers, body, alive)
     io = body_to_io(body)
     st = io.stat
@@ -93,7 +99,8 @@ class Rainbows::Coolio::Client < Coolio::IO
     if st.file?
       defer_file(status, headers, body, alive, io, st)
     elsif st.socket? || st.pipe?
-      chunk = stream_response_headers(status, headers, alive)
+      chunk = stream_response_headers(status, headers, alive, body)
+      return hijacked if nil == chunk
       stream_response_body(body, io, chunk)
     else
       # char or block device... WTF?
@@ -103,10 +110,11 @@ class Rainbows::Coolio::Client < Coolio::IO
 
   def ev_write_response(status, headers, body, alive)
     if body.respond_to?(:to_path)
-      write_response_path(status, headers, body, alive)
+      body = write_response_path(status, headers, body, alive)
     else
-      write_response(status, headers, body, alive)
+      body = write_response(status, headers, body, alive)
     end
+    return hijacked unless body
     return quit unless alive && :close != @state
     @state = :headers
   end
@@ -117,9 +125,11 @@ class Rainbows::Coolio::Client < Coolio::IO
     @env[RACK_INPUT] = input
     @env[REMOTE_ADDR] = @_io.kgio_addr
     @env[ASYNC_CALLBACK] = method(:write_async_response)
+    @hp.hijack_setup(@env, @_io)
     status, headers, body = catch(:async) {
       APP.call(@env.merge!(RACK_DEFAULTS))
     }
+    return hijacked if @hp.hijacked?
 
     (nil == status || -1 == status) ? @deferred = true :
         ev_write_response(status, headers, body, @hp.next?)
@@ -186,12 +196,13 @@ class Rainbows::Coolio::Client < Coolio::IO
     def defer_file(status, headers, body, alive, io, st)
       if r = sendfile_range(status, headers)
         status, headers, range = r
-        write_headers(status, headers, alive)
+        body = write_headers(status, headers, alive, body) or return hijacked
         range and defer_file_stream(range[0], range[1], io, body)
       else
-        write_headers(status, headers, alive)
+        write_headers(status, headers, alive, body) or return hijacked
         defer_file_stream(0, st.size, io, body)
       end
+      body
     end
 
     def stream_file_chunk(sf) # +sf+ is a Rainbows::StreamFile object
@@ -207,8 +218,9 @@ class Rainbows::Coolio::Client < Coolio::IO
     end
   else
     def defer_file(status, headers, body, alive, io, st)
-      write_headers(status, headers, alive)
+      write_headers(status, headers, alive, body) or return hijacked
       defer_file_stream(0, st.size, io, body)
+      body
     end
 
     def stream_file_chunk(body)

@@ -36,7 +36,7 @@ module Rainbows::Revactor::Client::Methods
   end
 
   def write_response(status, headers, body, alive)
-    super(status, headers, body, alive)
+    super(status, headers, body, alive) or return
     alive && @ts and @hp.buf << @ts.leftover
   end
 

@@ -52,16 +52,17 @@ module Rainbows::EvCore
   end
 
   # returns whether to enable response chunking for autochunk models
-  def stream_response_headers(status, headers, alive)
+  # returns nil if request was hijacked in response stage
+  def stream_response_headers(status, headers, alive, body)
     headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
     if headers.include?(Content_Length)
-      write_headers(status, headers, alive)
+      write_headers(status, headers, alive, body) or return
       return false
     end
 
     case @env[HTTP_VERSION]
     when "HTTP/1.0" # disable HTTP/1.0 keepalive to stream
-      write_headers(status, headers, false)
+      write_headers(status, headers, false, body) or return
       @hp.clear
       false
     when nil # "HTTP/0.9"
@@ -69,7 +70,7 @@ module Rainbows::EvCore
     else
       rv = !!(headers[Transfer_Encoding] =~ %r{\Achunked\z}i)
       rv = false unless @env["rainbows.autochunk"]
-      write_headers(status, headers, alive)
+      write_headers(status, headers, alive, body) or return
       rv
     end
   end

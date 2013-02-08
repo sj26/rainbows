@@ -14,6 +14,7 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
 
   # this is only called in the master thread
   def response_write(response)
+    return hijacked if @hp.hijacked?
     ev_write_response(*response, @hp.next?)
     rescue => e
       handle_error(e)
@@ -25,6 +26,7 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
   def app_response
     begin
       @env[REMOTE_ADDR] = @_io.kgio_addr
+      @hp.hijack_setup(@env, @_io)
       APP.call(@env.merge!(RACK_DEFAULTS))
     rescue => e
       Rainbows::Error.app(e) # we guarantee this does not raise

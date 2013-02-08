@@ -52,6 +52,7 @@ module Rainbows::Epoll::Client
     when String
       on_read(rv)
       return if @wr_queue[0] || closed?
+      return hijacked if @hp.hijacked?
     when :wait_readable
       KATO[self] = @@last_expire if :headers == @state
       return EP.set(self, IN)
@@ -67,7 +68,9 @@ module Rainbows::Epoll::Client
   def app_call input # called by on_read()
     @env[RACK_INPUT] = input
     @env[REMOTE_ADDR] = kgio_addr
+    @hp.hijack_setup(@env, self)
     status, headers, body = APP.call(@env.merge!(RACK_DEFAULTS))
+    return hijacked if @hp.hijacked?
     ev_write_response(status, headers, body, @hp.next?)
   end
 
@@ -78,7 +81,8 @@ module Rainbows::Epoll::Client
     if st.file?
       defer_file(status, headers, body, alive, io, st)
     elsif st.socket? || st.pipe?
-      chunk = stream_response_headers(status, headers, alive)
+      chunk = stream_response_headers(status, headers, alive, body)
+      return hijacked if nil == chunk
       stream_response_body(body, io, chunk)
     else
       # char or block device... WTF?
@@ -102,8 +106,16 @@ module Rainbows::Epoll::Client
     else
       write_response(status, headers, body, alive)
     end
+    return hijacked if @hp.hijacked?
     # try to read more if we didn't have to buffer writes
     next_request if alive && 0 == @wr_queue.size
+  end
+
+  def hijacked
+    KATO.delete(self)
+    Server.decr # no other place to do this
+    EP.delete(self)
+    nil
   end
 
   def next_request
@@ -113,6 +125,7 @@ module Rainbows::Epoll::Client
       # pipelined request (already in buffer)
       on_read(Z)
       return if @wr_queue[0] || closed?
+      return hijacked if @hp.hijacked?
       close if :close == @state
     end
   end
@@ -197,13 +210,14 @@ module Rainbows::Epoll::Client
     true
   end
 
+  # Rack apps should not hijack here, but they may...
   def defer_file(status, headers, body, alive, io, st)
     if r = sendfile_range(status, headers)
       status, headers, range = r
-      write_headers(status, headers, alive)
+      write_headers(status, headers, alive, body) or return hijacked
       range and defer_file_stream(range[0], range[1], io, body)
     else
-      write_headers(status, headers, alive)
+      write_headers(status, headers, alive, body) or return hijacked
       defer_file_stream(0, st.size, io, body)
     end
   end

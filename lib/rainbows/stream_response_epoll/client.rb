@@ -18,7 +18,7 @@ class Rainbows::StreamResponseEpoll::Client
   attr_reader :to_io
 
   def initialize(io, unwritten)
-    @closed = false
+    @finish = false
     @to_io = io
     @wr_queue = [ unwritten.dup ]
     EP.set(self, OUT)
@@ -29,7 +29,11 @@ class Rainbows::StreamResponseEpoll::Client
   end
 
   def close
-    @closed = true
+    @finish = true
+  end
+
+  def hijack(hijack)
+    @finish = hijack
   end
 
   def epoll_run
@@ -49,10 +53,14 @@ class Rainbows::StreamResponseEpoll::Client
   end
 
   def on_write_complete
-    if @closed
+    if true == @finish
       @to_io.shutdown
       @to_io.close
       N.decr(0, 1)
+    elsif @finish.respond_to?(:call) # hijacked
+      EP.delete(self)
+      N.decr(0, 1)
+      @finish.call(@to_io)
     end
   end
 end

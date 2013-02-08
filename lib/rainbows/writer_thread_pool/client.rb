@@ -8,11 +8,13 @@ class Rainbows::WriterThreadPool::Client < Struct.new(:to_io, :q)
 
   module Methods
     def write_body_each(body)
+      return if @hp.hijacked?
       q << [ to_io, :write_body_each, body ]
     end
 
     def write_response_close(status, headers, body, alive)
       to_io.instance_variable_set(:@hp, @hp) # XXX ugh
+      return if @hp.hijacked?
       Rainbows::SyncClose.new(body) { |sync_body|
         q << [ to_io, :write_response, status, headers, sync_body, alive ]
       }
