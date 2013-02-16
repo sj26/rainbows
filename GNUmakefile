@@ -28,14 +28,16 @@ clean:
 man html:
 	$(MAKE) -C Documentation install-$@
 
-pkg_extra += $(man1_paths)
+pkg_extra += $(man1_paths) lib/rainbows/version.rb
 
 doc::
 	cat Documentation/comparison.css >> doc/rdoc.css
 	$(RM) $(man1_rdoc)
 
+lib/rainbows/version.rb: GIT-VERSION-FILE
+
 all:: test
-test:
+test: lib/rainbows/version.rb
 	$(MAKE) -C t
 
 .PHONY: man html

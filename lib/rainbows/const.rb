@@ -1,9 +1,9 @@
 # -*- encoding: binary -*-
 # :enddoc:
 module Rainbows::Const
-
-  RAINBOWS_VERSION = '4.4.3'
-
+end
+require 'rainbows/version'
+module Rainbows::Const
   include Unicorn::Const
 
   RACK_DEFAULTS = Unicorn::HttpRequest::DEFAULTS.update({

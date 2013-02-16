@@ -19,3 +19,4 @@ pkg/
 /LATEST
 tags
 TAGS
+/lib/rainbows/version.rb
