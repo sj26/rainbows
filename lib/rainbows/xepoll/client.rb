@@ -27,9 +27,6 @@ module Rainbows::XEpoll::Client
   def self.loop
     begin
       EP.wait(nil, 1000) { |_, obj| obj.epoll_run }
-      while obj = ReRun.shift
-        obj.epoll_run
-      end
       Rainbows::Epoll::Client.expire
     rescue Errno::EINTR
     rescue => e

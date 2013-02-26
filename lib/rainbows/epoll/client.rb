@@ -6,14 +6,14 @@ module Rainbows::Epoll::Client
   include Rainbows::EvCore
   APP = Rainbows.server.app
   Server = Rainbows::Epoll::Server
-  IN = SleepyPenguin::Epoll::IN | SleepyPenguin::Epoll::ET
-  OUT = SleepyPenguin::Epoll::OUT | SleepyPenguin::Epoll::ET
+  IN = SleepyPenguin::Epoll::IN | SleepyPenguin::Epoll::ONESHOT
+  OUT = SleepyPenguin::Epoll::OUT | SleepyPenguin::Epoll::ONESHOT
+  EPINOUT = IN | OUT
   KATO = {}
   KATO.compare_by_identity if KATO.respond_to?(:compare_by_identity)
   Rainbows.at_quit { KATO.each_key { |k| k.timeout! }.clear }
   Rainbows.config!(self, :keepalive_timeout)
   EP = Rainbows::EP
-  ReRun = []
   @@last_expire = Time.now
 
   def self.expire
@@ -28,9 +28,6 @@ module Rainbows::Epoll::Client
   def self.loop
     begin
       EP.wait(nil, 1000) { |_, obj| obj.epoll_run }
-      while obj = ReRun.shift
-        obj.epoll_run
-      end
       expire
     rescue Errno::EINTR
     rescue => e
@@ -140,7 +137,7 @@ module Rainbows::Epoll::Client
   end
 
   def want_more
-    ReRun << self
+    EP.set(self, EPINOUT)
   end
 
   def on_deferred_write_complete
