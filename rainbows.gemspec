@@ -53,6 +53,7 @@ Gem::Specification.new do |s|
   # NeverBlock, currently only available on http://gems.github.com/
   # s.add_dependency(%q<espace-neverblock>, ["~> 0.1.6.1"])
 
-  # accessor not compatible with older RubyGems
-  # s.licenses = %w(GPLv3 GPLv2 Ruby)
+  # We inherited the Ruby 1.8 license from Mongrel, so we're stuck with it.
+  # GPLv3 is preferred.
+  s.licenses = ["GPLv2", "GPLv3", "Ruby 1.8"]
 end
