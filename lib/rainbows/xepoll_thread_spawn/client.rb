@@ -26,7 +26,7 @@ module Rainbows::XEpollThreadSpawn::Client
 
   ep = SleepyPenguin::Epoll
   EP = ep.new
-  IN = ep::IN | ep::ET | ep::ONESHOT
+  IN = ep::IN | ep::ONESHOT
   KATO = {}
   KATO.compare_by_identity if KATO.respond_to?(:compare_by_identity)
   LOCK = Mutex.new
