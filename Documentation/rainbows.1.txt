@@ -58,6 +58,10 @@ with rackup(1) but strongly discouraged.
     For production deployments, specifying the "listen" directive in
     CONFIG_FILE is recommended as it allows fine-tuning of socket
     options.
+-N, \--no-default-middleware
+:   Disables loading middleware implied by RACK_ENV.  This bypasses the
+    configuration documented in the RACK ENVIRONMENT section, but still
+    allows RACK_ENV to be used for application/framework-specific purposes.
 
 # RACKUP COMPATIBILITY OPTIONS
 -o, \--host HOST
@@ -137,10 +141,10 @@ All unrecognized values for RACK_ENV are assumed to be
 "none".  Production deployments are strongly encouraged to use
 "deployment" or "none" for maximum performance.
 
-Note that the Rack::ContentLength and Rack::Chunked middlewares
-are never loaded by default.  If needed, they should be
-individually specified in the RACKUP_FILE, some frameworks do
-not require them.
+Note the Rack::ContentLength and Rack::Chunked middlewares are also
+loaded by "deployment" and "development", but no other values of
+RACK_ENV.  If needed, they must be individually specified in the
+RACKUP_FILE, some frameworks do not require them.
 
 # SEE ALSO
 
