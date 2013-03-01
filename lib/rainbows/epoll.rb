@@ -19,6 +19,8 @@ require 'sendfile'
 # small enough to always be in your kernel page cache.  This concurrency
 # model may starve clients if you have slow disks and large static files.
 #
+# Do not use this if you have slow external dependencies.
+#
 # === RubyGem Requirements
 #
 # * raindrops 0.6.0 or later

@@ -7,6 +7,8 @@ require 'rainbows/epoll'
 # for Ruby 1.9 users as it can avoid accept()-scalability issues on
 # multicore machines with many worker processes.
 #
+# Do not use this if you have slow external dependencies.
+#
 # === RubyGem Requirements
 #
 # * raindrops 0.6.0 or later
