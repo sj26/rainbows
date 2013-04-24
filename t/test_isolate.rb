@@ -19,7 +19,7 @@ Isolate.now!(opts) do
   gem 'kgio', '2.8.0'
   gem 'rack', '1.5.2'
   gem 'kcar', '0.4.0'
-  gem 'raindrops', '0.10.0'
+  gem 'raindrops', '0.11.0'
   gem 'unicorn', '4.6.2'
 
   if engine == "ruby"
