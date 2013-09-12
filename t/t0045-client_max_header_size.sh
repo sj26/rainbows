@@ -60,7 +60,7 @@ t_begin "smallest HTTP/0.9 request works right" && {
 
 t_begin "HTTP/1.1 request fails" && {
 	curl -vsSf http://$listen/ > $tmp 2>&1 && die "unexpected curl success"
-	grep '400$' $tmp
+	grep '400\( Bad Request\)\?$' $tmp
 }
 
 t_begin "increase client_max_header_size on reload" && {
