@@ -11,7 +11,6 @@ doc:: man-rdoc
 include pkg.mk
 ifneq ($(VERSION),)
 release::
-	$(RAKE) raa_update VERSION=$(VERSION)
 	$(RAKE) publish_news VERSION=$(VERSION)
 	$(RAKE) fm_update VERSION=$(VERSION)
 endif
