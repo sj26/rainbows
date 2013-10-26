@@ -57,5 +57,5 @@ Gem::Specification.new do |s|
 
   # We inherited the Ruby 1.8 license from Mongrel, so we're stuck with it.
   # GPLv3 is preferred.
-  s.licenses = ["GPLv2", "GPLv3", "Ruby 1.8"]
+  s.licenses = ["GPLv2+", "Ruby 1.8"]
 end

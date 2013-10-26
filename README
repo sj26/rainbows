@@ -90,7 +90,7 @@ fast applications.
 == License
 
 \Rainbows! is copyright 2009,2010 by all contributors (see logs in git).
-\Rainbows! is licensed under the Ruby (1.8) license or the GPL (v2 or v3).
+\Rainbows! is licensed under the Ruby (1.8) license or the GPLv2 or later.
 See the included {LICENSE}[link:LICENSE.html] file for more details.
 
 \Rainbows! is 100% Free Software.
