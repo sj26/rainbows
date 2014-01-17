@@ -25,7 +25,7 @@ module Rainbows::Error
   def self.response(e)
     case e
     when EOFError, Errno::ECONNRESET, Errno::EPIPE, Errno::EINVAL,
-         Errno::EBADF, Errno::ENOTCONN
+         Errno::EBADF, Errno::ENOTCONN, Errno::ETIMEDOUT, Errno::EHOSTUNREACH
       # swallow error if client shuts down one end or disconnects
     when Unicorn::HttpParserError
       Rainbows::Const::ERROR_400_RESPONSE # try to tell the client they're bad
