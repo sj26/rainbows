@@ -8,16 +8,22 @@
 module Rainbows::Base
   # :stopdoc:
 
+  def sig_receiver(worker)
+    begin
+      worker.to_io.kgio_wait_readable
+      worker.kgio_tryaccept # Unicorn::Worker#kgio_tryaccept
+    rescue => e
+      Rainbows.alive or return
+      Unicorn.log_error(Rainbows.server.logger, "signal receiver", e)
+    end while true
+  end
+
   # this method is called by all current concurrency models
   def init_worker_process(worker) # :nodoc:
-    super(worker)
+    readers = super(worker)
     Rainbows::Response.setup
     Rainbows::MaxBody.setup
     Rainbows.worker = worker
-
-    # we're don't use the self-pipe mechanism in the Rainbows! worker
-    # since we don't defer reopening logs
-    Rainbows::HttpServer::SELF_PIPE.each { |x| x.close }.clear
 
     # spawn Threads since Logger takes a mutex by default and
     # we can't safely lock a mutex in a signal handler
@@ -25,7 +31,10 @@ module Rainbows::Base
     trap(:QUIT) { Thread.new { Rainbows.quit! } }
     [:TERM, :INT].each { |sig| trap(sig) { exit!(0) } } # instant shutdown
     Rainbows::ProcessClient.const_set(:APP, Rainbows.server.app)
+    Thread.new { sig_receiver(worker) }
     logger.info "Rainbows! #@use worker_connections=#@worker_connections"
+    Rainbows.readers = readers # for Rainbows.quit
+    readers # unicorn 4.8+ needs this
   end
 
   def process_client(client)

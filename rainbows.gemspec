@@ -28,8 +28,9 @@ Gem::Specification.new do |s|
   s.add_dependency(%q<kgio>, ['~> 2.5'])
 
   # we need Unicorn for the HTTP parser and process management
-  # 4.6.0+ supports hijacking, 4.6.2 fixes the chunk parser (for Ruby 2.0.0)
-  s.add_dependency(%q<unicorn>, ["~> 4.6", ">= 4.6.2"])
+  # we need unicorn 4.8.0+ since we depend on undocumented/unsupported
+  # unicorn internals.
+  s.add_dependency(%q<unicorn>, ["~> 4.8"])
 
   s.add_development_dependency(%q<isolate>, "~> 3.1")
   s.add_development_dependency(%q<wrongdoc>, "~> 1.6")

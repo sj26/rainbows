@@ -55,6 +55,7 @@ module Rainbows
     attr_reader :alive
     attr_writer :worker
     attr_writer :forked
+    attr_writer :readers
   end
 
   def self.config!(mod, *opts)
@@ -88,7 +89,9 @@ module Rainbows
       @alive = false
       Rainbows::HttpParser.quit
       @expire = Time.now + (@server.timeout * 2.0)
-      Unicorn::HttpServer::LISTENERS.each { |s| s.close rescue nil }.clear
+      tmp = @readers.dup
+      @readers.clear
+      tmp.each { |s| s.close rescue nil }.clear
       @at_quit.each { |task| task.call }
     end
     false
