@@ -4,7 +4,7 @@ require 'unicorn'
 # the value passed to TCP_DEFER_ACCEPT actually matters in Linux 2.6.32+
 Unicorn::SocketHelper::DEFAULTS[:tcp_defer_accept] = 60
 
-# See http://rainbows.rubyforge.org/ for documentation
+# See http://rainbows.bogomips.org/ for documentation
 module Rainbows
   # :stopdoc:
   O = {}

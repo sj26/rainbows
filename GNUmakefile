@@ -1,6 +1,7 @@
 # use GNU Make to run tests in parallel, and without depending on RubyGems
 all::
-RSYNC_DEST := rubyforge.org:/var/www/gforge-projects/rainbows
+# RSYNC_DEST := rubyforge.org:/var/www/gforge-projects/rainbows
+RSYNC_DEST := rainbows.bogomips.org:/srv/rainbows
 rfproject := rainbows
 rfpackage := rainbows
 
