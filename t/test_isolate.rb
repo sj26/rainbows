@@ -26,7 +26,7 @@ Isolate.now!(opts) do
     gem 'sendfile', '1.2.1'
     gem 'cool.io', '1.1.0'
 
-    gem 'eventmachine', '1.0.0'
+    gem 'eventmachine', '1.0.3'
     gem 'sinatra', '1.3.3'
     gem 'async_sinatra', '1.0.0'
 

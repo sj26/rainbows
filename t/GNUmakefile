@@ -35,7 +35,7 @@ models += StreamResponseEpoll
 
 ifeq ($(RUBY_ENGINE),ruby)
   rp := )
-  ONENINE := $(shell case $(RUBY_VERSION) in 1.9.*|2.0.*$(rp) echo true;;esac)
+  ONENINE := $(shell case $(RUBY_VERSION) in 1.9.*|2.*$(rp) echo true;;esac)
   ifeq ($(ONENINE),true)
     ifeq ($(RUBY_VERSION),1.9.2)
       models += Revactor
@@ -46,13 +46,8 @@ ifeq ($(RUBY_ENGINE),ruby)
     models += CoolioThreadSpawn
     models += CoolioFiberSpawn
 
-    # EventMachine 1.0.0 currently does not build on Ruby 2.0.0
-    # NeverBlock depends on 2.0.0
-    RBTWO := $(shell case $(RUBY_VERSION) in 2.0.*$(rp) echo true;;esac)
-    ifeq ($(RBTWO),)
-      models += EventMachine
-      models += NeverBlock
-    endif
+    models += EventMachine
+    models += NeverBlock
   endif
 endif
 
