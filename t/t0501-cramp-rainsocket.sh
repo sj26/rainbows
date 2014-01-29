@@ -1,7 +1,7 @@
 #!/bin/sh
 . ./test-lib.sh
 case $model in
-EventMachine) ;;
+disabled) ;;
 *)
 	t_info "skipping $T since it's not compatible with $model"
 	exit 0
