@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors = ["#{name} hackers"]
   s.date = Time.now.utc.strftime('%Y-%m-%d')
   s.description = readme_description
-  s.email = %q{rainbows-talk@rubyforge.org}
+  s.email = %q{rainbows-public@bogomips.org}
   s.executables = %w(rainbows)
   s.extra_rdoc_files = extra_rdoc_files(manifest)
   s.files = manifest
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency(%q<unicorn>, ["~> 4.8"])
 
   s.add_development_dependency(%q<isolate>, "~> 3.1")
-  s.add_development_dependency(%q<wrongdoc>, "~> 1.6")
+  s.add_development_dependency(%q<wrongdoc>, "~> 1.8")
 
   # optional runtime dependencies depending on configuration
   # see t/test_isolate.rb for the exact versions we've tested with

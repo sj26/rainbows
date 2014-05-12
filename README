@@ -49,7 +49,7 @@ network concurrency.
 
 == Features
 
-* Designed for {Rack}[http://rack.rubyforge.org/], the standard for
+* Designed for {Rack}[http://rack.github.io/], the standard for
   modern Ruby HTTP applications.
 
 * Built on {Unicorn}[http://unicorn.bogomips.org/], inheriting its
@@ -97,12 +97,7 @@ See the included {LICENSE}[link:LICENSE.html] file for more details.
 
 == Install
 
-You may download the tarball from the \Rainbows! project page on Rubyforge
-and run setup.rb after unpacking it:
-
-http://rubyforge.org/frs/?group_id=8977
-
-You may also install it via RubyGems on RubyGems.org:
+You may install it via RubyGems on RubyGems.org:
 
   gem install rainbows
 
@@ -168,12 +163,11 @@ and we'll try our best to fix it.
 == Contact
 
 All feedback (bug reports, user/development discussion, patches, pull
-requests) go to the mailing list/newsgroup.  Patches must be sent inline
+requests) go to the mailing list.  Patches must be sent inline
 (git format-patch -M + git send-email).  No subscription is necessary
 to post on the mailing list.  No top posting.  Address replies +To:+
 the mailing list.
 
-* email: mailto:rainbows-talk@rubyforge.org
-* nntp: nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general
-* subscribe: http://rubyforge.org/mailman/listinfo/rainbows-talk
-* archives: http://rubyforge.org/pipermail/rainbows-talk
+* email: mailto:rainbows-public@bogomips.org
+* subscribe: mailto:rainbows-public+subscribe@bogomips.org
+* archives: http://bogomips.org/rainbows-public/

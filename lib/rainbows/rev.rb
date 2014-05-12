@@ -2,8 +2,8 @@
 Rainbows.const_set(:Rev, Rainbows::Coolio)
 # Coolio is the new version of this, use that instead.
 #
-# Implements a basic single-threaded event model with
-# {Rev}[http://rev.rubyforge.org/].  It is capable of handling
+# Implements a basic single-threaded event model with Rev.
+# It is capable of handling
 # thousands of simultaneous client connections, but with only a
 # single-threaded app dispatch.  It is suited for slow clients and
 # fast applications (applications that do not have slow network

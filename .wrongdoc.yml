@@ -6,5 +6,6 @@ changelog_start: v0.97.0
 merge_html:
   rainbows_1: Documentation/rainbows.1.html
   Summary: Documentation/comparison.html
-public_email: rainbows-talk@rubyforge.org
+public_email: rainbows-public@bogomips.org
 private_email: rainbows@bogomips.org
+ml_url: http://bogomips.org/rainbows-public/

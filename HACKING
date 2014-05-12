@@ -15,8 +15,8 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"http://mid.gmane.org/$MESSAGE_ID" if possible since the Message-ID
-remains searchable even if Gmane becomes unavailable.
+"http://bogomips.org/rainbows-public/m/$MESSAGE_ID" if possible since
+the Message-ID remains searchable even if the website becomes unavailable.
 
 == Contributing
 
@@ -40,10 +40,9 @@ distributed with git on on patch submission guidelines to follow.  Just
 don't email the git mailing list or maintainer with Rainbows! patches :)
 
 No subscription is required to post to the mailing list at
-rainbows-talk@rubyforge.org
+rainbows-public@bogomips.org
 
-Please ask for Cc: if you are not subscribed (Cc:-by-default is uncommon
-on Ruby mailing lists)
+Please Cc: everyone on replies, as not everyone is subscribed.
 
 == Building a Gem
 
