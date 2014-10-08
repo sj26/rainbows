@@ -23,25 +23,27 @@ Isolate.now!(opts) do
   gem 'unicorn', '4.8.3'
 
   if engine == "ruby"
-    gem 'sendfile', '1.2.1'
-    gem 'cool.io', '1.1.0'
-
-    gem 'eventmachine', '1.0.3'
-    gem 'async_sinatra', '1.0.0'
-
-    gem 'neverblock', '0.1.6.2'
+    gem 'sendfile', '1.2.2'
+    if RUBY_VERSION.to_f < 2.2
+      gem 'cool.io', '1.1.0'
+      gem 'eventmachine', '1.0.3'
+      gem 'async_sinatra', '1.0.0'
+      gem 'neverblock', '0.1.6.2'
+    end
   end
 
   if defined?(::Fiber) && engine == "ruby"
-    gem 'revactor', '0.1.5'
-    gem 'rack-fiber_pool', '0.9.2'
+    if RUBY_VERSION.to_f < 2.2
+      gem 'revactor', '0.1.5'
+      gem 'rack-fiber_pool', '0.9.2' # depends on EM
+    end
   end
 
   if RUBY_PLATFORM =~ /linux/
     gem 'sleepy_penguin', '3.3.0'
 
     # is 2.6.32 new enough?
-    gem 'io_splice', '4.2.0' if `uname -r`.strip > '2.6.32'
+    gem 'io_splice', '4.3.0' if `uname -r`.strip > '2.6.32'
   end
 end
 

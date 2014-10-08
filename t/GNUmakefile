@@ -29,7 +29,6 @@ models += WriterThreadPool
 models += WriterThreadSpawn
 models += ThreadPool
 models += ThreadSpawn
-models += Coolio
 
 models += StreamResponseEpoll
 
@@ -42,12 +41,16 @@ ifeq ($(RUBY_ENGINE),ruby)
     endif
     models += FiberSpawn
     models += FiberPool
-    models += CoolioThreadPool
-    models += CoolioThreadSpawn
-    models += CoolioFiberSpawn
 
-    models += EventMachine
-    models += NeverBlock
+    RUBY_LE_2_1 := $(shell $(RUBY) -e 'puts((RUBY_VERSION.to_f <= 2.1).to_s))')
+    ifeq ($(RUBY_LE_2_1), true)
+      models += Coolio
+      models += CoolioThreadPool
+      models += CoolioThreadSpawn
+      models += CoolioFiberSpawn
+      models += EventMachine
+      models += NeverBlock
+    endif
   endif
 endif
 
