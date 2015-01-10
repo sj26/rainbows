@@ -1,11 +1,11 @@
-= \Rainbows! is like Unicorn, but Different...
+= \Rainbows! is like unicorn, but Different...
 
-While \Rainbows! depends on Unicorn for its process/socket management,
+While \Rainbows! depends on unicorn for its process/socket management,
 HTTP parser and configuration language; \Rainbows! is more ambitious.
 
 == Architectural Diagrams
 
-=== Unicorn uses a 1:1 mapping of processes to clients
+=== unicorn uses a 1:1 mapping of processes to clients
 
      unicorn master
      \_ unicorn worker[0]
@@ -52,16 +52,16 @@ In both cases, workers share common listen sockets with the master and
 pull connections off the listen queue only if the worker has resources
 available.
 
-== Differences from Unicorn
+== Differences from unicorn
 
-* log rotation is handled immediately in \Rainbows! whereas Unicorn has
+* log rotation is handled immediately in \Rainbows! whereas unicorn has
   the luxury of delaying it until the current request is finished
   processing to prevent log entries for one request to be split across
   files.
 
 * load balancing between workers is imperfect, certain worker processes
   may be servicing more requests than others so it is important to not
-  set +worker_connections+ too high.  Unicorn worker processes can never
+  set +worker_connections+ too high.  unicorn worker processes can never
   be servicing more than one request at once.
 
 * speculative, non-blocking accept() is not used, this is to help
@@ -72,10 +72,10 @@ available.
 * Less heavily-tested and inherently more complex.
 
 
-== Similarities with Unicorn
+== Similarities with unicorn
 
 While some similarities are obvious (we depend on and subclass off
-Unicorn code), some things are not:
+unicorn code), some things are not:
 
 * Does not attempt to accept() connections when pre-configured limits
   are hit (+worker_connections+).  This will first help balance load

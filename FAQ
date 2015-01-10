@@ -1,10 +1,10 @@
 = Frequently Asked Questions about \Rainbows!
 
-=== Why is \Rainbows! a separate project from Unicorn?
+=== Why is \Rainbows! a separate project from unicorn?
 
-\Rainbows! is for the odd, corner-case requests that Unicorn is poorly
+\Rainbows! is for the odd, corner-case requests that unicorn is poorly
 suited for.  More scalable concurrency models introduce additional
-complexity that Unicorn users and developers are uncomfortable with for
+complexity that unicorn users and developers are uncomfortable with for
 the common cases.
 
 
@@ -15,7 +15,7 @@ models, or are just too lazy to deal with them for the majority of
 requests we service.
 
 
-=== Isn't "rainbows" a branch of Unicorn?
+=== Isn't "rainbows" a branch of unicorn?
 
 That functionality is now in the Revactor model of \Rainbows!
 However, \Revactor is not recommended since it is dormant
@@ -23,7 +23,7 @@ upstream and requires your application (and all its libraries)
 to cooperate with \Revactor for concurrency.
 
 
-=== What happened to the "gossamer" branch of Unicorn?
+=== What happened to the "gossamer" branch of unicorn?
 
 It became the ThreadPool model of \Rainbows!
 
@@ -39,7 +39,7 @@ ease-of-debugging, compatibility, performance, and memory usage.
 === Should I put \Rainbows! behind nginx to serve slow clients?
 
 It is optional.  You can still use nginx to route certain requests to
-Unicorn and others to \Rainbows!  nginx will always outperform
+unicorn and others to \Rainbows!  nginx will always outperform
 \Rainbows! in both pure reverse proxy applications and for serving
 static files,  but \Rainbows! is for hosting applications that are more
 easily-implemented in Ruby than C.
@@ -64,7 +64,7 @@ requires a extra {patch}[http://haproxy.1wt.eu/download/patches/].
 If you don't need streaming "rack.input", then nginx is a great HTTPS
 reverse proxy.
 
-Refer to the {Unicorn FAQ}[http://unicorn.bogomips.org/FAQ.html] on how
+Refer to the {unicorn FAQ}[http://unicorn.bogomips.org/FAQ.html] on how
 to ensure redirects go to "https://" URLs.
 
 

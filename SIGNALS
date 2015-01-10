@@ -5,7 +5,7 @@ the signals Rainbows! uses internally to communicate with the worker
 processes are documented here as well.  With the exception of TTIN/TTOU,
 signal handling matches the behavior of and {nginx}[http://nginx.net/]
 so it should be possible to easily share process management scripts
-between \Rainbows!, Unicorn and nginx.
+between \Rainbows!, unicorn and nginx.
 
 === Master Process
 
@@ -60,7 +60,7 @@ automatically respawned.
 
 * USR1 - Reopen all logs owned by the worker process.
   See Unicorn::Util.reopen_logs for what is considered a log.
-  Unlike Unicorn, log files are reopened immediately in \Rainbows!
+  Unlike unicorn, log files are reopened immediately in \Rainbows!
   since worker processes are likely to be serving multiple clients
   simutaneously, we can't wait for all of them to finish.
 
@@ -68,7 +68,7 @@ automatically respawned.
 
 You may replace a running instance of rainbows with a new one without
 losing any incoming connections.  Doing so will reload all of your
-application code, Unicorn/Rainbows! config, Ruby executable, and all
+application code, unicorn/Rainbows! config, Ruby executable, and all
 libraries.  The only things that will not change (due to OS limitations)
 are:
 

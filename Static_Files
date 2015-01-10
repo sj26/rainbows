@@ -10,7 +10,7 @@ to simplify your deployments and only deploy one server?
 == {sendfile}[http://rubygems.org/gems/sendfile] RubyGem
 
 To enable the "sendfile" gem, just make sure you have 1.1.0 or later and
-"require" it in your \Rainbows!/Unicorn config file (not your Rack
+"require" it in your \Rainbows!/unicorn config file (not your Rack
 config.ru):
 
     require 'sendfile' # that's it! nothing else to do

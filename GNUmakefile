@@ -2,23 +2,16 @@
 all::
 # RSYNC_DEST := rubyforge.org:/var/www/gforge-projects/rainbows
 RSYNC_DEST := rainbows.bogomips.org:/srv/rainbows
-rfproject := rainbows
 rfpackage := rainbows
+PLACEHOLDERS := rainbows_1 Summary
 
 man-rdoc: man html
 	$(MAKE) -C Documentation comparison.html
-	for i in $(man1_rdoc); do echo > $$i; done
 doc:: man-rdoc
 include pkg.mk
-ifneq ($(VERSION),)
-release::
-	$(RAKE) publish_news VERSION=$(VERSION)
-	$(RAKE) fm_update VERSION=$(VERSION)
-endif
 
 base_bins := rainbows
 bins := $(addprefix bin/, $(base_bins))
-man1_rdoc := $(addsuffix _1, $(base_bins))
 man1_bins := $(addsuffix .1, $(base_bins))
 man1_paths := $(addprefix man/man1/, $(man1_bins))
 
@@ -29,10 +22,6 @@ man html:
 	$(MAKE) -C Documentation install-$@
 
 pkg_extra += $(man1_paths) lib/rainbows/version.rb
-
-doc::
-	cat Documentation/comparison.css >> doc/rdoc.css
-	$(RM) $(man1_rdoc)
 
 lib/rainbows/version.rb: GIT-VERSION-FILE
 

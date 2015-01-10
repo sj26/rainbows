@@ -1,6 +1,6 @@
 = Tips for using \Rainbows! with Sandbox installation tools
 
-Most {tips for Unicorn}[http://unicorn.bogomips.org/Sandbox.html]
+Most {tips for unicorn}[http://unicorn.bogomips.org/Sandbox.html]
 for Bundler and Isolate apply to \Rainbows! as well.
 
 == TLDR (Bundler)

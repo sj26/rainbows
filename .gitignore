@@ -11,7 +11,7 @@
 log/
 pkg/
 /vendor
-/NEWS
+/NEWS*
 /ChangeLog
 /.manifest
 /GIT-VERSION-FILE
@@ -19,4 +19,6 @@ pkg/
 /LATEST
 tags
 TAGS
+/Summary
+/rainbows_1
 /lib/rainbows/version.rb

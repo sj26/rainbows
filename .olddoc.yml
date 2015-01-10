@@ -2,10 +2,17 @@
 cgit_url: http://bogomips.org/rainbows.git
 git_url: git://bogomips.org/rainbows.git
 rdoc_url: http://rainbows.bogomips.org/
-changelog_start: v0.97.0
 merge_html:
   rainbows_1: Documentation/rainbows.1.html
   Summary: Documentation/comparison.html
 public_email: rainbows-public@bogomips.org
 private_email: rainbows@bogomips.org
+noindex:
+- TODO
+- LATEST
+- Unicorn
+- Unicorn::Configurator
+- Unicorn::SocketHelper
+- EM
+- Revactor
 ml_url: http://bogomips.org/rainbows-public/
