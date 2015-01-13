@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.files = manifest
   s.homepage = Olddoc.config['rdoc_url']
   s.summary = summary
-  s.rdoc_options = rdoc_options
 
   # we want a newer Rack for a valid HeaderHash#each
   s.add_dependency(%q<rack>, ['~> 1.1'])
