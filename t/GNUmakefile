@@ -42,7 +42,7 @@ ifeq ($(RUBY_ENGINE),ruby)
     models += FiberSpawn
     models += FiberPool
 
-    RUBY_LE_2_1 := $(shell $(RUBY) -e 'puts((RUBY_VERSION.to_f <= 2.1).to_s))')
+    RUBY_LE_2_1 := $(shell $(RUBY) -e 'puts(RUBY_VERSION.to_f <= 2.1)')
     ifeq ($(RUBY_LE_2_1), true)
       models += Coolio
       models += CoolioThreadPool
