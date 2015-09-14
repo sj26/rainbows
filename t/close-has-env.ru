@@ -10,6 +10,7 @@ class ClosablePipe < ::IO
   end
 
   def close
+    return if closed? # idempotent for Ruby 2.3.0 compatibility
     super
     $stdout.syswrite "path_info=#{@env['PATH_INFO']}\n"
   end
