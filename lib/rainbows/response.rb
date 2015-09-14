@@ -129,7 +129,7 @@ module Rainbows::Response
       module CopyStream
         def write_body_file(body, range)
           range ? COPY_STREAM.copy_stream(body, self, range[1], range[0]) :
-                  COPY_STREAM.copy_stream(body, self, nil, 0)
+                  COPY_STREAM.copy_stream(body, self)
         end
       end
       include CopyStream
