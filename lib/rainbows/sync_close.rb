@@ -16,6 +16,14 @@ class Rainbows::SyncClose
     @body.respond_to?(m)
   end
 
+  def readpartial(*args)
+    @body.readpartial(*args)
+  end
+
+  def read(*args)
+    @body.read(*args)
+  end
+
   def to_path
     @body.to_path
   end
@@ -31,7 +39,7 @@ class Rainbows::SyncClose
   # called by the writer thread to wake up the original thread (in #initialize)
   def close
     @body.close
-    ensure
-      @mutex.synchronize { @cv.signal }
+  ensure
+    @mutex.synchronize { @cv.signal }
   end
 end
