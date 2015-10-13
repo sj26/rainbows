@@ -128,6 +128,11 @@ module Rainbows::Response
     unless IO.method_defined?(:trysendfile)
       module CopyStream
         def write_body_file(body, range)
+          # ensure sendfile gets used for SyncClose objects:
+          if !body.kind_of?(IO) && body.respond_to?(:to_path)
+            body = body.to_path
+          end
+
           range ? COPY_STREAM.copy_stream(body, self, range[1], range[0]) :
                   COPY_STREAM.copy_stream(body, self)
         end

@@ -16,14 +16,6 @@ class Rainbows::SyncClose
     @body.respond_to?(m)
   end
 
-  def readpartial(*args)
-    @body.readpartial(*args)
-  end
-
-  def read(*args)
-    @body.read(*args)
-  end
-
   def to_path
     @body.to_path
   end
