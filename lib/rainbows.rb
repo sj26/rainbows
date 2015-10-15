@@ -93,6 +93,9 @@ module Rainbows
       @readers.clear
       tmp.each { |s| s.close rescue nil }.clear
       @at_quit.each { |task| task.call }
+
+      # XXX hack to break out of IO.select in worker_loop for some models
+      Process.kill(:QUIT, $$)
     end
     false
   end
