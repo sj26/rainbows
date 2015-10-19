@@ -6,17 +6,12 @@ request/response times and/or slow clients.
 
 If you're on GNU/Linux and overwhelmed by options in \Rainbows!,
 consider {yahns}[http://yahns.yhbt.net/] as it has fewer options
-and more energy-efficient during non-peak traffic.
+and more energy-efficient during non-peak traffic and may also
+be configured as a single worker process.
 
 For Rack applications not heavily bound by slow external network
 dependencies, consider unicorn instead as it simpler and easier to
 debug.
-
-If you're on a small system, or write extremely tight and reliable code
-and don't want multiple worker processes, check out
-{Zbatery}[http://zbatery.bogomip.org/], too. Zbatery can use all the
-crazy network concurrency options of \Rainbows! in a single worker
-process.
 
 == \Rainbows! is about Diversity
 
