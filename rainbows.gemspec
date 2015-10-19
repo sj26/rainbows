@@ -53,7 +53,11 @@ Gem::Specification.new do |s|
   # NeverBlock, currently only available on http://gems.github.com/
   # s.add_dependency(%q<espace-neverblock>, ["~> 0.1.6.1"])
 
-  # We inherited the Ruby 1.8 license from Mongrel, so we're stuck with it.
-  # GPLv3 is preferred.
-  s.licenses = ["GPLv2+", "Ruby 1.8"]
+  # Note: To avoid ambiguity, we intentionally avoid the SPDX-compatible
+  # 'Ruby' here since Ruby 1.9.3 switched to BSD-2-Clause license while
+  # we already inherited our license from Mongrel during Ruby 1.8.
+  # We cannot automatically switch licenses when Ruby changes their license,
+  # so we remain optionally-licensed under the terms of Ruby 1.8 despite
+  # not having a good way to specify this in an SPDX-compatible way...
+  s.licenses = ['GPL-2.0+', 'Nonstandard'] # Nonstandard = 'Ruby 1.8'
 end
