@@ -15,18 +15,8 @@ module Rainbows::Response
       Rainbows::HttpParser.keepalive_requests = 0
   end
 
-  # Rack 1.5.0 (protocol version 1.2) adds response hijacking support
-  if ((Rack::VERSION[0] << 8) | Rack::VERSION[1]) >= 0x0102
-    def hijack_prepare(value)
-      value
-    end
-
-    def hijack_socket
-      @hp.env['rack.hijack'].call
-    end
-  else
-    def hijack_prepare(_)
-    end
+  def hijack_socket
+    @hp.env['rack.hijack'].call
   end
 
   # returns the original body on success
@@ -45,7 +35,7 @@ module Rainbows::Response
       when "rack.hijack"
         # this was an illegal key in Rack < 1.5, so it should be
         # OK to silently discard it for those older versions
-        hijack = hijack_prepare(value)
+        hijack = value
         alive = false # No persistent connections for hijacking
       else
         if /\n/ =~ value

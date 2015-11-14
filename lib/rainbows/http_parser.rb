@@ -17,6 +17,15 @@ class Rainbows::HttpParser < Unicorn::HttpParser
     super
   end
 
+  def hijack_setup(io)
+    @hijack_io = io
+    env['rack.hijack'] = self # avoid allocating a new proc this way
+  end
+
+  def call # for rack.hijack
+    env['rack.hijack_io'] = @hijack_io
+  end
+
   def self.quit
     alias_method :next?, :never!
   end

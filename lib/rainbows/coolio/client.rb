@@ -125,7 +125,7 @@ class Rainbows::Coolio::Client < Coolio::IO
     @env['rack.input'] = input
     @env['REMOTE_ADDR'] = @_io.kgio_addr
     @env['async.callback'] = method(:write_async_response)
-    @hp.hijack_setup(@env, @_io)
+    @hp.hijack_setup(@_io)
     status, headers, body = catch(:async) {
       APP.call(@env.merge!(RACK_DEFAULTS))
     }

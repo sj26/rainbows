@@ -65,7 +65,7 @@ module Rainbows::Epoll::Client
   def app_call input # called by on_read()
     @env['rack.input'] = input
     @env['REMOTE_ADDR'] = kgio_addr
-    @hp.hijack_setup(@env, self)
+    @hp.hijack_setup(self)
     status, headers, body = APP.call(@env.merge!(RACK_DEFAULTS))
     return hijacked if @hp.hijacked?
     ev_write_response(status, headers, body, @hp.next?)

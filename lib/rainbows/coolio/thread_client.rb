@@ -26,7 +26,7 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
   def app_response
     begin
       @env['REMOTE_ADDR'] = @_io.kgio_addr
-      @hp.hijack_setup(@env, @_io)
+      @hp.hijack_setup(@_io)
       APP.call(@env.merge!(RACK_DEFAULTS))
     rescue => e
       Rainbows::Error.app(e) # we guarantee this does not raise

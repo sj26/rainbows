@@ -39,7 +39,7 @@ module Rainbows::ProcessClient
 
       set_input(env, hp)
       env['REMOTE_ADDR'] = kgio_addr
-      hp.hijack_setup(env, to_io)
+      hp.hijack_setup(to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
 
       if 100 == status.to_i
@@ -72,7 +72,7 @@ module Rainbows::ProcessClient
     begin
       set_input(env, hp)
       env['REMOTE_ADDR'] = kgio_addr
-      hp.hijack_setup(env, to_io)
+      hp.hijack_setup(to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
       if 100 == status.to_i
         write("HTTP/1.1 100 Continue\r\n\r\n".freeze)
