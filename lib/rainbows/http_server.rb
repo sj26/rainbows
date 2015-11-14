@@ -92,11 +92,11 @@ class Rainbows::HttpServer < Unicorn::HttpServer
   end
 
   def keepalive_requests=(nr)
-    Unicorn::HttpRequest.keepalive_requests = nr
+    Rainbows::HttpParser.keepalive_requests = nr
   end
 
   def keepalive_requests
-    Unicorn::HttpRequest.keepalive_requests
+    Rainbows::HttpParser.keepalive_requests
   end
 
   def client_max_header_size=(bytes)
