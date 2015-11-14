@@ -40,8 +40,9 @@ module Rainbows::Response
   def write_headers(status, headers, alive, body)
     @hp.headers? or return body
     hijack = nil
-    status = CODES[status.to_i] || status
-    buf = "HTTP/1.1 #{status}\r\n" \
+    code = status.to_i
+    msg = Rack::Utils::HTTP_STATUS_CODES[code]
+    buf = "HTTP/1.1 #{msg ? %Q(#{code} #{msg}) : status}\r\n" \
           "Date: #{httpdate}\r\n"
     headers.each do |key, value|
       case key

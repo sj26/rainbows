@@ -20,18 +20,18 @@ require "raindrops"
 # * sleepy_penguin 3.0.1 or later
 module Rainbows::StreamResponseEpoll
   # :stopdoc:
-  CODES = Unicorn::HttpResponse::CODES
   HEADER_END = "X-Accel-Buffering: no\r\n\r\n"
   autoload :Client, "rainbows/stream_response_epoll/client"
 
   def http_response_write(socket, status, headers, body)
-    status = CODES[status.to_i] || status
     hijack = ep_client = false
 
     if headers
       # don't set extra headers here, this is only intended for
       # consuming by nginx.
-      buf = "HTTP/1.0 #{status}\r\n"
+      code = status.to_i
+      msg = Rack::Utils::HTTP_STATUS_CODES[code]
+      buf = "HTTP/1.0 #{msg ? %Q(#{code} #{msg}) : status}\r\n"
       headers.each do |key, value|
         case key
         when "rack.hijack"
