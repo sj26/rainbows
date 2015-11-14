@@ -2,10 +2,6 @@
 # :enddoc:
 module Rainbows::Response
   include Unicorn::HttpResponse
-  Close = "close"
-  KeepAlive = "keep-alive"
-  Content_Length = "Content-Length".freeze
-  Transfer_Encoding = "Transfer-Encoding".freeze
   Rainbows.config!(self, :copy_stream)
 
   # private file class for IO objects opened by Rainbows! itself (and not
@@ -21,14 +17,12 @@ module Rainbows::Response
 
   # Rack 1.5.0 (protocol version 1.2) adds response hijacking support
   if ((Rack::VERSION[0] << 8) | Rack::VERSION[1]) >= 0x0102
-    RACK_HIJACK = "rack.hijack"
-
     def hijack_prepare(value)
       value
     end
 
     def hijack_socket
-      @hp.env[RACK_HIJACK].call
+      @hp.env['rack.hijack'].call
     end
   else
     def hijack_prepare(_)
@@ -62,7 +56,8 @@ module Rainbows::Response
         end
       end
     end
-    write(buf << "Connection: #{alive ? KeepAlive : Close}\r\n\r\n")
+    write(buf << "Connection: #{alive ? 'keep-alive'.freeze
+                                      : 'close'.freeze}\r\n\r\n")
 
     if hijack
       body = nil # ensure caller does not close body
@@ -152,22 +147,19 @@ module Rainbows::Response
   end  # ! COPY_STREAM
 
   if IO.method_defined?(:trysendfile) || COPY_STREAM
-    HTTP_RANGE = 'HTTP_RANGE'
-    Content_Range = 'Content-Range'.freeze
-
     # This does not support multipart responses (does anybody actually
     # use those?)
     def sendfile_range(status, headers)
       status = status.to_i
       if 206 == status
-        if %r{\Abytes (\d+)-(\d+)/\d+\z} =~ headers[Content_Range]
+        if %r{\Abytes (\d+)-(\d+)/\d+\z} =~ headers['Content-Range'.freeze]
           a, b = $1.to_i, $2.to_i
           return 206, headers, [ a,  b - a + 1 ]
         end
         return # wtf...
       end
       200 == status &&
-      /\Abytes=(\d+-\d*|\d*-\d+)\z/ =~ @hp.env[HTTP_RANGE] or
+      /\Abytes=(\d+-\d*|\d*-\d+)\z/ =~ @hp.env['HTTP_RANGE'] or
         return
       a, b = $1.split(/-/)
 
@@ -175,7 +167,7 @@ module Rainbows::Response
       # uses a regular Ruby Hash with properly-cased headers the
       # same way they're presented in rfc2616.
       headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
-      clen = headers[Content_Length] or return
+      clen = headers['Content-Length'.freeze] or return
       size = clen.to_i
 
       if b.nil? # bytes=M-
@@ -190,13 +182,14 @@ module Rainbows::Response
       end
 
       if 0 > count || offset >= size
-        headers[Content_Length] = "0"
-        headers[Content_Range] = "bytes */#{clen}"
+        headers['Content-Length'.freeze] = "0"
+        headers['Content-Range'.freeze] = "bytes */#{clen}"
         return 416, headers, nil
       else
         count = size if count > size
-        headers[Content_Length] = count.to_s
-        headers[Content_Range] = "bytes #{offset}-#{offset+count-1}/#{clen}"
+        headers['Content-Length'.freeze] = count.to_s
+        headers['Content-Range'.freeze] =
+                                    "bytes #{offset}-#{offset+count-1}/#{clen}"
         return 206, headers, [ offset, count ]
       end
     end

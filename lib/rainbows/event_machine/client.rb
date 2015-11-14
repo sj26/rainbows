@@ -23,7 +23,7 @@ class Rainbows::EventMachine::Client < EM::Connection
       end
       EM.next_tick { receive_data(nil) } unless @buf.empty?
     else
-      on_read(data || Z) if (@buf.size > 0) || data
+      on_read(data || ''.freeze) if (@buf.size > 0) || data
     end
   end
 
@@ -34,10 +34,10 @@ class Rainbows::EventMachine::Client < EM::Connection
 
   def app_call input
     set_comm_inactivity_timeout 0
-    @env[RACK_INPUT] = input
-    @env[REMOTE_ADDR] = @_io.kgio_addr
-    @env[ASYNC_CALLBACK] = method(:write_async_response)
-    @env[ASYNC_CLOSE] = EM::DefaultDeferrable.new
+    @env['rack.input'] = input
+    @env['REMOTE_ADDR'] = @_io.kgio_addr
+    @env['async.callback'] = method(:write_async_response)
+    @env['async.close'] = EM::DefaultDeferrable.new
     @hp.hijack_setup(@env, @_io)
     status, headers, body = catch(:async) {
       APP.call(@env.merge!(RACK_DEFAULTS))
@@ -117,7 +117,7 @@ class Rainbows::EventMachine::Client < EM::Connection
 
   def unbind
     return if @hp.hijacked?
-    async_close = @env[ASYNC_CLOSE] and async_close.succeed
+    async_close = @env['async.close'] and async_close.succeed
     @deferred.respond_to?(:fail) and @deferred.fail
     begin
       @_io.close

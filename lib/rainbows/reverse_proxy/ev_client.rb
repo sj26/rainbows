@@ -3,18 +3,15 @@
 require 'tempfile'
 module Rainbows::ReverseProxy::EvClient
   include Rainbows::ReverseProxy::Synchronous
-  AsyncCallback = "async.callback"
   CBB = Unicorn::TeeInput.client_body_buffer_size
-  Content_Length = "Content-Length"
-  Transfer_Encoding = "Transfer-Encoding"
 
   def receive_data(buf)
     if @body
       @body << buf
     else
       response = @parser.headers(@headers, @rbuf << buf) or return
-      if (cl = @headers[Content_Length] && cl.to_i > CBB) ||
-         (%r{\bchunked\b} =~ @headers[Transfer_Encoding])
+      if (cl = @headers['Content-Length'.freeze] && cl.to_i > CBB) ||
+         (%r{\bchunked\b} =~ @headers['Transfer-Encoding'.freeze])
         @body = LargeBody.new("")
         @body << @rbuf
         @response = response << @body

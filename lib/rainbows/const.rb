@@ -13,7 +13,4 @@ module Rainbows::Const
     # if they're the response body.  Unset by default.
     # "rainbows.autochunk" => false,
   })
-
-  RACK_INPUT = Unicorn::HttpRequest::RACK_INPUT
-  REMOTE_ADDR = Unicorn::HttpRequest::REMOTE_ADDR
 end

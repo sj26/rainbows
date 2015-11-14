@@ -8,13 +8,9 @@ module Rainbows::EvCore
   HttpParser = Rainbows::HttpParser
   autoload :CapInput, 'rainbows/ev_core/cap_input'
   RBUF = ""
-  Z = "".freeze
   Rainbows.config!(self, :client_header_buffer_size)
-  HTTP_VERSION = "HTTP_VERSION"
 
   # Apps may return this Rack response: AsyncResponse = [ -1, {}, [] ]
-  ASYNC_CALLBACK = "async.callback".freeze
-  ASYNC_CLOSE = "async.close".freeze
 
   def write_async_response(response)
     status, headers, body = response
@@ -23,8 +19,8 @@ module Rainbows::EvCore
       # "Transfer-Encoding: chunked", and the async.callback stuff
       # isn't Rack::Lint-compatible, so we have to enforce it here.
       headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
-      alive = headers.include?(Content_Length) ||
-              !!(%r{\Achunked\z}i =~ headers[Transfer_Encoding])
+      alive = headers.include?('Content-Length'.freeze) ||
+              !!(%r{\Achunked\z}i =~ headers['Transfer-Encoding'.freeze])
     end
     @deferred = nil
     ev_write_response(status, headers, body, alive)
@@ -55,12 +51,12 @@ module Rainbows::EvCore
   # returns nil if request was hijacked in response stage
   def stream_response_headers(status, headers, alive, body)
     headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
-    if headers.include?(Content_Length)
+    if headers.include?('Content-Length'.freeze)
       write_headers(status, headers, alive, body) or return
       return false
     end
 
-    case @env[HTTP_VERSION]
+    case @env['HTTP_VERSION']
     when "HTTP/1.0" # disable HTTP/1.0 keepalive to stream
       write_headers(status, headers, false, body) or return
       @hp.clear
@@ -68,7 +64,7 @@ module Rainbows::EvCore
     when nil # "HTTP/0.9"
       false
     else
-      rv = !!(headers[Transfer_Encoding] =~ %r{\Achunked\z}i)
+      rv = !!(headers['Transfer-Encoding'] =~ %r{\Achunked\z}i)
       rv = false unless @env["rainbows.autochunk"]
       write_headers(status, headers, alive, body) or return
       rv
@@ -78,14 +74,14 @@ module Rainbows::EvCore
   def prepare_request_body
     # since we don't do streaming input, we have no choice but
     # to take over 100-continue handling from the Rack application
-    if @env[HTTP_EXPECT] =~ /\A100-continue\z/i
-      write(EXPECT_100_RESPONSE)
-      @env.delete(HTTP_EXPECT)
+    if @env['HTTP_EXPECT'] =~ /\A100-continue\z/i
+      write("HTTP/1.1 100 Continue\r\n\r\n".freeze)
+      @env.delete('HTTP_EXPECT'.freeze)
     end
     @input = mkinput
     @hp.filter_body(@buf2 = "", @buf)
     @input << @buf2
-    on_read(Z)
+    on_read(''.freeze)
   end
 
   # TeeInput doesn't map too well to this right now...
@@ -111,7 +107,7 @@ module Rainbows::EvCore
       elsif data.size > 0
         @hp.filter_body(@buf2, @buf << data)
         @input << @buf2
-        on_read(Z)
+        on_read(''.freeze)
       else
         want_more
       end
@@ -127,10 +123,8 @@ module Rainbows::EvCore
       handle_error(e)
   end
 
-  ERROR_413_RESPONSE = "HTTP/1.1 413 Request Entity Too Large\r\n\r\n"
-
   def err_413(msg)
-    write(ERROR_413_RESPONSE)
+    write("HTTP/1.1 413 Request Entity Too Large\r\n\r\n".freeze)
     quit
     # zip back up the stack
     raise IOError, msg, []

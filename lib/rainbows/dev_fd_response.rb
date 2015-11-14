@@ -11,12 +11,6 @@ class Rainbows::DevFdResponse < Struct.new(:app)
 
   # :stopdoc:
   FD_MAP = Rainbows::FD_MAP
-  Content_Length = "Content-Length".freeze
-  Transfer_Encoding = "Transfer-Encoding".freeze
-  Rainbows_autochunk = "rainbows.autochunk".freeze
-  Rainbows_model = "rainbows.model"
-  HTTP_VERSION = "HTTP_VERSION"
-  Chunked = "chunked"
   include Rack::Utils
 
   # Rack middleware entry point, we'll just pass through responses
@@ -40,23 +34,23 @@ class Rainbows::DevFdResponse < Struct.new(:app)
     fileno = io.fileno
     FD_MAP[fileno] = io
     if st.file?
-      headers[Content_Length] ||= st.size.to_s
-      headers.delete(Transfer_Encoding)
+      headers['Content-Length'.freeze] ||= st.size.to_s
+      headers.delete('Transfer-Encoding'.freeze)
     elsif st.pipe? || st.socket? # epoll-able things
-      unless headers.include?(Content_Length)
-        if env[Rainbows_autochunk]
-          case env[HTTP_VERSION]
+      unless headers.include?('Content-Length'.freeze)
+        if env['rainbows.autochunk']
+          case env['HTTP_VERSION']
           when "HTTP/1.0", nil
           else
-            headers[Transfer_Encoding] = Chunked
+            headers['Transfer-Encoding'.freeze] = 'chunked'
           end
         else
-          env[Rainbows_autochunk] = false
+          env['rainbows.autochunk'] = false
         end
       end
 
       # we need to make sure our pipe output is Fiber-compatible
-      case env[Rainbows_model]
+      case env['rainbows.model']
       when :FiberSpawn, :FiberPool, :RevFiberSpawn, :CoolioFiberSpawn
         io.respond_to?(:kgio_wait_readable) or
           io = Rainbows::Fiber::IO.new(io)

@@ -48,19 +48,14 @@ class Rainbows::MaxBody
     @app, @limit = app, limit
   end
 
-  # :stopdoc:
-  RACK_INPUT = "rack.input".freeze
-  CONTENT_LENGTH = "CONTENT_LENGTH"
-  HTTP_TRANSFER_ENCODING = "HTTP_TRANSFER_ENCODING"
-
   # our main Rack middleware endpoint
   def call(env)
     @limit = Rainbows.server.client_max_body_size if nil == @limit
     catch(:rainbows_EFBIG) do
-      len = env[CONTENT_LENGTH]
+      len = env['CONTENT_LENGTH']
       if len && len.to_i > @limit
         return err
-      elsif /\Achunked\z/i =~ env[HTTP_TRANSFER_ENCODING]
+      elsif /\Achunked\z/i =~ env['HTTP_TRANSFER_ENCODING']
         limit_input!(env)
       end
       @app.call(env)
@@ -89,9 +84,9 @@ class Rainbows::MaxBody
   end
 
   def limit_input!(env)
-    input = env[RACK_INPUT]
+    input = env['rack.input']
     klass = input.respond_to?(:rewind) ? RewindableWrapper : Wrapper
-    env[RACK_INPUT] = klass.new(input, @limit)
+    env['rack.input'] = klass.new(input, @limit)
   end
 
   # :startdoc:

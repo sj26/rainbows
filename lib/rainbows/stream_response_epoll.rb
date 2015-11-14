@@ -20,7 +20,6 @@ require "raindrops"
 # * sleepy_penguin 3.0.1 or later
 module Rainbows::StreamResponseEpoll
   # :stopdoc:
-  HEADER_END = "X-Accel-Buffering: no\r\n\r\n"
   autoload :Client, "rainbows/stream_response_epoll/client"
 
   def http_response_write(socket, status, headers, body)
@@ -46,7 +45,7 @@ module Rainbows::StreamResponseEpoll
           end
         end
       end
-      buf << HEADER_END
+      buf << "X-Accel-Buffering: no\r\n\r\n".freeze
 
       case rv = socket.kgio_trywrite(buf)
       when nil then break
@@ -101,8 +100,8 @@ module Rainbows::StreamResponseEpoll
     status, headers, body = @app.call(env = @request.read(client))
 
     if 100 == status.to_i
-      client.write(Unicorn::Const::EXPECT_100_RESPONSE)
-      env.delete(Unicorn::Const::HTTP_EXPECT)
+      client.write("HTTP/1.1 100 Continue\r\n\r\n".freeze)
+      env.delete('HTTP_EXPECT'.freeze)
       status, headers, body = @app.call(env)
     end
     @request.headers? or headers = nil

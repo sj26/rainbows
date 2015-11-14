@@ -5,7 +5,6 @@ module Rainbows::ProcessClient
   include Rainbows::Const
 
   NULL_IO = Unicorn::HttpRequest::NULL_IO
-  RACK_INPUT = Unicorn::HttpRequest::RACK_INPUT
   IC = Unicorn::HttpRequest.input_class
   Rainbows.config!(self, :client_header_buffer_size, :keepalive_timeout)
 
@@ -39,13 +38,13 @@ module Rainbows::ProcessClient
       end
 
       set_input(env, hp)
-      env[REMOTE_ADDR] = kgio_addr
+      env['REMOTE_ADDR'] = kgio_addr
       hp.hijack_setup(env, to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
 
       if 100 == status.to_i
-        write(EXPECT_100_RESPONSE)
-        env.delete(HTTP_EXPECT)
+        write("HTTP/1.1 100 Continue\r\n\r\n".freeze)
+        env.delete('HTTP_EXPECT'.freeze)
         status, headers, body = APP.call(env)
       end
       return if hp.hijacked?
@@ -66,18 +65,18 @@ module Rainbows::ProcessClient
   end
 
   def set_input(env, hp)
-    env[RACK_INPUT] = 0 == hp.content_length ? NULL_IO : IC.new(self, hp)
+    env['rack.input'] = 0 == hp.content_length ? NULL_IO : IC.new(self, hp)
   end
 
   def process_pipeline(env, hp)
     begin
       set_input(env, hp)
-      env[REMOTE_ADDR] = kgio_addr
+      env['REMOTE_ADDR'] = kgio_addr
       hp.hijack_setup(env, to_io)
       status, headers, body = APP.call(env.merge!(RACK_DEFAULTS))
       if 100 == status.to_i
-        write(EXPECT_100_RESPONSE)
-        env.delete(HTTP_EXPECT)
+        write("HTTP/1.1 100 Continue\r\n\r\n".freeze)
+        env.delete('HTTP_EXPECT'.freeze)
         status, headers, body = APP.call(env)
       end
       return if hp.hijacked?

@@ -19,11 +19,6 @@ module Rainbows
 
 class ServerToken < Struct.new(:app, :token)
 
-  # :stopdoc:
-  #
-  # Freeze constants as they're slightly faster when setting hashes
-  SERVER = "Server".freeze
-
   def initialize(app, token = Const::RACK_DEFAULTS['SERVER_SOFTWARE'])
     super
   end
@@ -31,7 +26,7 @@ class ServerToken < Struct.new(:app, :token)
   def call(env)
     status, headers, body = app.call(env)
     headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
-    headers[SERVER] = token
+    headers['Server'.freeze] = token
     [ status, headers, body ]
   end
   # :startdoc:

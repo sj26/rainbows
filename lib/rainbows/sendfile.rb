@@ -52,12 +52,10 @@ class Rainbows::Sendfile < Struct.new(:app)
   # +each+ in case a given concurrency model does not optimize
   # +to_path+ calls.
   class Body < Struct.new(:to_path) # :nodoc: all
-    CONTENT_LENGTH = 'Content-Length'.freeze
-
     def self.new(path, headers)
-      unless headers[CONTENT_LENGTH]
+      unless headers['Content-Length'.freeze]
         stat = File.stat(path)
-        headers[CONTENT_LENGTH] = stat.size.to_s if stat.file?
+        headers['Content-Length'.freeze] = stat.size.to_s if stat.file?
       end
       super(path)
     end
@@ -71,14 +69,10 @@ class Rainbows::Sendfile < Struct.new(:app)
     end
   end
 
-  # :stopdoc:
-  X_SENDFILE = 'X-Sendfile'
-  # :startdoc:
-
   def call(env) # :nodoc:
     status, headers, body = app.call(env)
     headers = Rack::Utils::HeaderHash.new(headers) unless Hash === headers
-    if path = headers.delete(X_SENDFILE)
+    if path = headers.delete('X-Sendfile'.freeze)
       body = Body.new(path, headers) unless body.respond_to?(:to_path)
     end
     [ status, headers, body ]

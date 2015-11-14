@@ -47,15 +47,6 @@ class Rainbows::ReverseProxy
   autoload :EventMachine, 'rainbows/reverse_proxy/event_machine'
   autoload :EvClient, 'rainbows/reverse_proxy/ev_client'
 
-  HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR"
-  REMOTE_ADDR = "REMOTE_ADDR"
-  REQUEST_METHOD = "REQUEST_METHOD"
-  REQUEST_URI = "REQUEST_URI"
-  CRLF = "\r\n"
-  TR = %w(_ -)
-  CONTENT_LENGTH = "CONTENT_LENGTH"
-  HTTP_TRANSFER_ENCODING = "HTTP_TRANSFER_ENCODING"
-  RackInput = "rack.input"
   E502 = [ 502, [ %w(Content-Length 0), %w(Content-Type text/plain) ], [] ]
 
   def initialize(opts)
@@ -113,24 +104,23 @@ class Rainbows::ReverseProxy
 
   # returns request headers for sending to the upstream as a string
   def build_headers(env, input)
-    remote_addr = env[REMOTE_ADDR]
-    xff = env[HTTP_X_FORWARDED_FOR]
+    remote_addr = env['REMOTE_ADDR']
+    xff = env['HTTP_X_FORWARDED_FOR']
     xff = xff ? "#{xff},#{remote_addr}" : remote_addr
-    req = "#{env[REQUEST_METHOD]} #{env[REQUEST_URI]} HTTP/1.0\r\n" \
+    req = "#{env['REQUEST_METHOD']} #{env['REQUEST_URI']} HTTP/1.0\r\n" \
           "Connection: close\r\n" \
           "X-Forwarded-For: #{xff}\r\n"
-    uscore, dash = *TR
     env.each do |key, value|
       %r{\AHTTP_(\w+)\z} =~ key or next
       key = $1
       next if %r{\A(?:VERSION|CONNECTION|KEEP_ALIVE|X_FORWARDED_FOR)\z}x =~ key
-      key.tr!(uscore, dash)
+      key.tr!('_'.freeze, '-'.freeze)
       req << "#{key}: #{value}\r\n"
     end
     input and req << (input.respond_to?(:size) ?
                      "Content-Length: #{input.size}\r\n" :
-                     "Transfer-Encoding: chunked\r\n")
-    req << CRLF
+                     "Transfer-Encoding: chunked\r\n".freeze)
+    req << "\r\n".freeze
   end
 
   def pick_upstream(env) # +env+ is reserved for future expansion
@@ -139,16 +129,16 @@ class Rainbows::ReverseProxy
   end
 
   def prepare_input!(env)
-    if cl = env[CONTENT_LENGTH]
+    if cl = env['CONTENT_LENGTH']
       size = cl.to_i
       size > 0 or return
-    elsif %r{\Achunked\z}i =~ env.delete(HTTP_TRANSFER_ENCODING)
+    elsif %r{\Achunked\z}i =~ env.delete('HTTP_TRANSFER_ENCODING')
       # do people use multiple transfer-encodings?
     else
       return
     end
 
-    input = env[RackInput]
+    input = env['rack.input']
     if input.respond_to?(:rewind)
       if input.respond_to?(:size)
         input.size # TeeInput-specific behavior

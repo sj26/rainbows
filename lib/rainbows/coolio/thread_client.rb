@@ -8,7 +8,7 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
   def app_call input
     KATO.delete(self)
     disable if enabled?
-    @env[RACK_INPUT] = input
+    @env['rack.input'] = input
     app_dispatch # must be implemented by subclass
   end
 
@@ -25,7 +25,7 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
   # here because that could cause a deadlock and we'd leak FDs
   def app_response
     begin
-      @env[REMOTE_ADDR] = @_io.kgio_addr
+      @env['REMOTE_ADDR'] = @_io.kgio_addr
       @hp.hijack_setup(@env, @_io)
       APP.call(@env.merge!(RACK_DEFAULTS))
     rescue => e

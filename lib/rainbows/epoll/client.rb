@@ -63,8 +63,8 @@ module Rainbows::Epoll::Client
   end
 
   def app_call input # called by on_read()
-    @env[RACK_INPUT] = input
-    @env[REMOTE_ADDR] = kgio_addr
+    @env['rack.input'] = input
+    @env['REMOTE_ADDR'] = kgio_addr
     @hp.hijack_setup(@env, self)
     status, headers, body = APP.call(@env.merge!(RACK_DEFAULTS))
     return hijacked if @hp.hijacked?
@@ -93,7 +93,7 @@ module Rainbows::Epoll::Client
                     Rainbows::Epoll::ResponsePipe).new(io, self, body)
     return @wr_queue << pipe if @wr_queue[0]
     stream_pipe(pipe) or return
-    @wr_queue[0] or @wr_queue << Z
+    @wr_queue[0] or @wr_queue << ''.freeze
   end
 
   def ev_write_response(status, headers, body, alive)
@@ -120,7 +120,7 @@ module Rainbows::Epoll::Client
       want_more
     else
       # pipelined request (already in buffer)
-      on_read(Z)
+      on_read(''.freeze)
       return if @wr_queue[0] || closed?
       return hijacked if @hp.hijacked?
       close if :close == @state

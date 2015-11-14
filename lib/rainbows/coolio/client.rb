@@ -122,9 +122,9 @@ class Rainbows::Coolio::Client < Coolio::IO
   def app_call input
     KATO.delete(self)
     disable if enabled?
-    @env[RACK_INPUT] = input
-    @env[REMOTE_ADDR] = @_io.kgio_addr
-    @env[ASYNC_CALLBACK] = method(:write_async_response)
+    @env['rack.input'] = input
+    @env['REMOTE_ADDR'] = @_io.kgio_addr
+    @env['async.callback'] = method(:write_async_response)
     @hp.hijack_setup(@env, @_io)
     status, headers, body = catch(:async) {
       APP.call(@env.merge!(RACK_DEFAULTS))
@@ -157,7 +157,7 @@ class Rainbows::Coolio::Client < Coolio::IO
           KATO[self] = Time.now
         end
       else
-        on_read(Z)
+        on_read(''.freeze)
       end
     end
     rescue => e

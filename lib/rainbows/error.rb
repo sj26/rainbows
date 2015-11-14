@@ -28,11 +28,11 @@ module Rainbows::Error
          Errno::EBADF, Errno::ENOTCONN, Errno::ETIMEDOUT, Errno::EHOSTUNREACH
       # swallow error if client shuts down one end or disconnects
     when Unicorn::HttpParserError
-      Rainbows::Const::ERROR_400_RESPONSE # try to tell the client they're bad
+      "HTTP/1.1 400 Bad Request\r\n\r\n" # try to tell the client they're bad
     when IOError # HttpParserError is an IOError
     else
       app(e)
-      Rainbows::Const::ERROR_500_RESPONSE
+      "HTTP/1.1 500 Internal Server Error\r\n\r\n"
     end
   end
 end
