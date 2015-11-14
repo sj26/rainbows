@@ -42,8 +42,7 @@ module Rainbows::Response
     hijack = nil
     status = CODES[status.to_i] || status
     buf = "HTTP/1.1 #{status}\r\n" \
-          "Date: #{httpdate}\r\n" \
-          "Status: #{status}\r\n"
+          "Date: #{httpdate}\r\n"
     headers.each do |key, value|
       case key
       when %r{\A(?:Date\z|Connection\z)}i

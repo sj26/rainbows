@@ -31,7 +31,7 @@ module Rainbows::StreamResponseEpoll
     if headers
       # don't set extra headers here, this is only intended for
       # consuming by nginx.
-      buf = "HTTP/1.0 #{status}\r\nStatus: #{status}\r\n"
+      buf = "HTTP/1.0 #{status}\r\n"
       headers.each do |key, value|
         case key
         when "rack.hijack"
