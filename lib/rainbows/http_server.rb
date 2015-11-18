@@ -8,6 +8,7 @@ class Rainbows::HttpServer < Unicorn::HttpServer
   attr_accessor :client_header_buffer_size
   attr_accessor :client_max_body_size
   attr_reader :use
+  attr_reader :master_pid
 
   def self.setup(block)
     Rainbows.server.instance_eval(&block)
