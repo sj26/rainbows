@@ -34,7 +34,7 @@ module Rainbows::StreamResponseEpoll
       headers.each do |key, value|
         case key
         when "rack.hijack"
-          hijack = hijack_prepare(value)
+          hijack = value
           body = nil # ensure we do not close body
         else
           if /\n/ =~ value
