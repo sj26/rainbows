@@ -29,7 +29,7 @@ module Rainbows::Fiber
   # right?).  Calling this directly is deprecated, use
   # Rainbows.sleep(seconds) instead.
   def self.sleep(seconds)
-    ZZ[Fiber.current] = Time.now + seconds
+    ZZ[Fiber.current] = Rainbows.now + seconds
     Fiber.yield
   end
 

@@ -63,7 +63,7 @@ class Rainbows::Fiber::IO
     expire = nil
     case rv = Kgio.tryread(@to_io, 16384, buf)
     when :wait_readable
-      return if expire && expire < Time.now
+      return if expire && expire < Rainbows.now
       expire ||= read_expire
       kgio_wait_readable
     else

@@ -9,7 +9,7 @@ module Rainbows::ProcessClient
   Rainbows.config!(self, :client_header_buffer_size, :keepalive_timeout)
 
   def read_expire
-    Time.now + KEEPALIVE_TIMEOUT
+    Rainbows.now + KEEPALIVE_TIMEOUT
   end
 
   # used for reading headers (respecting keepalive_timeout)
@@ -18,7 +18,7 @@ module Rainbows::ProcessClient
     begin
       case rv = kgio_tryread(CLIENT_HEADER_BUFFER_SIZE, buf)
       when :wait_readable
-        return if expire && expire < Time.now
+        return if expire && expire < Rainbows.now
         expire ||= read_expire
         kgio_wait_readable(KEEPALIVE_TIMEOUT)
       else

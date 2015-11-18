@@ -20,7 +20,7 @@ Isolate.now!(opts) do
   gem 'rack', '1.6.4'
   gem 'kcar', '0.5.0'
   gem 'raindrops', '0.13.0'
-  gem 'unicorn', '4.9.0'
+  gem 'unicorn', '5.0.1'
 
   if engine == "ruby"
     gem 'sendfile', '1.2.2'

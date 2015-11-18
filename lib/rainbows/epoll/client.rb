@@ -14,10 +14,10 @@ module Rainbows::Epoll::Client
   Rainbows.at_quit { KATO.each_key { |k| k.timeout! }.clear }
   Rainbows.config!(self, :keepalive_timeout)
   EP = Rainbows::EP
-  @@last_expire = Time.now
+  @@last_expire = Rainbows.now
 
   def self.expire
-    return if ((now = Time.now) - @@last_expire) < 1.0
+    return if ((now = Rainbows.now) - @@last_expire) < 1.0
     if (ot = KEEPALIVE_TIMEOUT) >= 0
       ot = now - ot
       KATO.delete_if { |client, time| time < ot and client.timeout! }

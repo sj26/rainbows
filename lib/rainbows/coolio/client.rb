@@ -154,7 +154,7 @@ class Rainbows::Coolio::Client < Coolio::IO
         # buf == :wait_readable
         unless enabled?
           enable
-          KATO[self] = Time.now
+          KATO[self] = Rainbows.now
         end
       else
         on_read(''.freeze)

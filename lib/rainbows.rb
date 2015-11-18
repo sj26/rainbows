@@ -75,8 +75,8 @@ module Rainbows
   end
 
   def self.tick
-    @worker.tick = Time.now.to_i
-    exit!(2) if @expire && Time.now >= @expire
+    @worker.tick = now.to_i
+    exit!(2) if @expire && now >= @expire
     @alive && @server.master_pid == Process.ppid or quit!
   end
 
@@ -88,7 +88,7 @@ module Rainbows
     unless @expire
       @alive = false
       Rainbows::HttpParser.quit
-      @expire = Time.now + (@server.timeout * 2.0)
+      @expire = now + (@server.timeout * 2.0)
       tmp = @readers.dup
       @readers.clear
       tmp.each { |s| s.close rescue nil }.clear
@@ -98,6 +98,19 @@ module Rainbows
       Process.kill(:QUIT, $$)
     end
     false
+  end
+
+  # try to use the monotonic clock in Ruby >= 2.1, it is immune to clock
+  # offset adjustments and generates less garbage (Float vs Time object)
+  begin
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    def self.now
+      Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    end
+  rescue NameError, NoMethodError
+    def self.now # Ruby <= 2.0
+      Rainbows.now
+    end
   end
 
   autoload :Base, "rainbows/base"

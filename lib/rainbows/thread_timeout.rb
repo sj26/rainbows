@@ -63,7 +63,7 @@ class Rainbows::ThreadTimeout
 
   # The MRI 1.8 won't be usable in January 2038, we'll raise this
   # when we eventually drop support for 1.8 (before 2038, hopefully)
-  NEVER = Time.at(0x7fffffff)
+  NEVER = 0x7fffffff
 
   def initialize(app, opts)
     # @timeout must be Numeric since we add this to Time
@@ -114,7 +114,7 @@ class Rainbows::ThreadTimeout
     # is hopeless and we might as well just die anyways.
     # initialize guarantees @timeout will be Numeric
     start_watchdog(env) unless @watchdog
-    @active[Thread.current] = Time.now + @timeout
+    @active[Thread.current] = Rainbows.now + @timeout
 
     begin
       # It is important to unlock inside this begin block
@@ -162,7 +162,7 @@ class Rainbows::ThreadTimeout
         # that are about to release themselves from the eye of the
         # watchdog thread.
         @lock.synchronize do
-          now = Time.now
+          now = Rainbows.now
           @active.delete_if do |thread, expire_at|
             # We also use this loop to get the maximum possible time to
             # sleep for if we're not killing the thread.
@@ -184,7 +184,7 @@ class Rainbows::ThreadTimeout
           sleep(@timeout)
         else
           # sleep until the next known thread is about to expire.
-          sec = next_expiry - Time.now
+          sec = next_expiry - Rainbows.now
           sec > 0.0 ? sleep(sec) : Thread.pass # give other threads a chance
         end
       rescue => e

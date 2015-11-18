@@ -46,7 +46,7 @@ module Rainbows::XEpollThreadPool::Client
     LOCK.synchronize { clients = KATO.keys; KATO.clear }
     clients.each { |io| io.closed? or io.close }
   end
-  @@last_expire = Time.now
+  @@last_expire = Rainbows.now
 
   def kato_set
     LOCK.synchronize { KATO[self] = @@last_expire }
@@ -70,7 +70,7 @@ module Rainbows::XEpollThreadPool::Client
   end
 
   def self.expire
-    return if ((now = Time.now) - @@last_expire) < 1.0
+    return if ((now = Rainbows.now) - @@last_expire) < 1.0
     if (ot = KEEPALIVE_TIMEOUT) >= 0
       ot = now - ot
       defer = []

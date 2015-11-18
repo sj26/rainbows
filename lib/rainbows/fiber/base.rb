@@ -40,7 +40,7 @@ module Rainbows::Fiber::Base
   # woken and returns an interval to IO.select on
   def schedule_sleepers
     max = nil
-    now = Time.now
+    now = Rainbows.now
     fibs = []
     ZZ.delete_if { |fib, time|
       if now >= time
@@ -54,7 +54,7 @@ module Rainbows::Fiber::Base
 
     max_sleep = 1.0 # wake up semi-frequently to prevent SIGKILL from master
     if max
-      max -= Time.now
+      max -= Rainbows.now
       return 0 if max < 0.0
       return max_sleep if max > max_sleep
       max
