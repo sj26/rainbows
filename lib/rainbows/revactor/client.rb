@@ -1,6 +1,5 @@
 # -*- encoding: binary -*-
 # :enddoc:
-require 'fcntl'
 class Rainbows::Revactor::Client
   autoload :TeeSocket, 'rainbows/revactor/client/tee_socket'
   RD_ARGS = {}
@@ -11,7 +10,7 @@ class Rainbows::Revactor::Client
   def initialize(client)
     @client, @rd_args, @ts = client, [ nil ], nil
     io = client.instance_variable_get(:@_io)
-    io.fcntl(Fcntl::F_SETFD, Fcntl::FD_CLOEXEC)
+    io.close_on_exec = true
     @kgio_addr = if Revactor::TCP::Socket === client
       @rd_args << RD_ARGS
       client.remote_addr

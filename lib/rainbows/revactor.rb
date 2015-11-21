@@ -1,6 +1,5 @@
 # -*- encoding: binary -*-
 require 'revactor'
-require 'fcntl'
 Revactor::VERSION >= '0.1.5' or abort 'revactor 0.1.5 is required'
 
 # Enables use of the Actor model through {Revactor}[http://revactor.org]
