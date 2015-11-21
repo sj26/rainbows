@@ -46,8 +46,8 @@ module Rainbows::Response
         end
       end
     end
-    write(buf << "Connection: #{alive ? 'keep-alive'.freeze
-                                      : 'close'.freeze}\r\n\r\n")
+    write(buf << (alive ? "Connection: keep-alive\r\n\r\n".freeze
+                        : "Connection: close\r\n\r\n".freeze))
 
     if hijack
       body = nil # ensure caller does not close body
