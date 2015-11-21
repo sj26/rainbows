@@ -30,7 +30,7 @@ module Rainbows::Response
           "Date: #{httpdate}\r\n"
     headers.each do |key, value|
       case key
-      when %r{\A(?:Date\z|Connection\z)}i
+      when %r{\A(?:Date|Connection)\z}i
         next
       when "rack.hijack"
         # this was an illegal key in Rack < 1.5, so it should be
