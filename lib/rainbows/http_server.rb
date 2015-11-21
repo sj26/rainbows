@@ -82,10 +82,10 @@ class Rainbows::HttpServer < Unicorn::HttpServer
   end
 
   def use=(mod)
-    @use = mod.to_s.split(/::/)[-1].to_sym
+    @use = mod.to_s.split('::')[-1].to_sym
     new_defaults = {
       'rainbows.model' => @use,
-      'rack.multithread' => !!(mod.to_s =~ /Thread/),
+      'rack.multithread' => mod.to_s.include?('Thread'),
       'rainbows.autochunk' => [:Coolio,:Rev,:Epoll,:XEpoll,
                                :EventMachine,:NeverBlock].include?(@use),
     }

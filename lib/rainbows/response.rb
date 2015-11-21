@@ -40,7 +40,7 @@ module Rainbows::Response
       else
         if /\n/ =~ value
           # avoiding blank, key-only cookies with /\n+/
-          buf << value.split(/\n+/).map! { |v| "#{key}: #{v}\r\n" }.join
+          value.split(/\n+/).each { |v| buf << "#{key}: #{v}\r\n" }
         else
           buf << "#{key}: #{value}\r\n"
         end
@@ -151,7 +151,7 @@ module Rainbows::Response
       200 == status &&
       /\Abytes=(\d+-\d*|\d*-\d+)\z/ =~ @hp.env['HTTP_RANGE'] or
         return
-      a, b = $1.split(/-/)
+      a, b = $1.split('-'.freeze)
 
       # HeaderHash is quite expensive, and Rack::File currently
       # uses a regular Ruby Hash with properly-cased headers the
