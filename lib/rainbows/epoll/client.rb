@@ -9,9 +9,8 @@ module Rainbows::Epoll::Client
   IN = SleepyPenguin::Epoll::IN | SleepyPenguin::Epoll::ONESHOT
   OUT = SleepyPenguin::Epoll::OUT | SleepyPenguin::Epoll::ONESHOT
   EPINOUT = IN | OUT
-  KATO = {}
-  KATO.compare_by_identity if KATO.respond_to?(:compare_by_identity)
-  Rainbows.at_quit { KATO.each_key { |k| k.timeout! }.clear }
+  KATO = {}.compare_by_identity
+  Rainbows.at_quit { KATO.each_key(&:timeout!).clear }
   Rainbows.config!(self, :keepalive_timeout)
   EP = Rainbows::EP
   @@last_expire = Rainbows.now

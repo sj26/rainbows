@@ -21,14 +21,14 @@
 #   stdout_path "/path/to/output.log"
 module Rainbows::Configurator
   Unicorn::Configurator::DEFAULTS.merge!({
-    :use => Rainbows::Base,
-    :worker_connections => 50,
-    :keepalive_timeout => 5,
-    :keepalive_requests => 100,
-    :client_max_body_size => 1024 * 1024,
-    :client_header_buffer_size => 1024,
-    :client_max_header_size => 112 * 1024,
-    :copy_stream => IO.respond_to?(:copy_stream) ? IO : false,
+    use: Rainbows::Base,
+    worker_connections: 50,
+    keepalive_timeout: 5,
+    keepalive_requests: 100,
+    client_max_body_size: 1024 * 1024,
+    client_header_buffer_size: 1024,
+    client_max_header_size: 112 * 1024,
+    copy_stream: IO,
   })
 
   # Configures \Rainbows! with a given concurrency model to +use+ and

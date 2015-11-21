@@ -50,7 +50,7 @@ module Rainbows::Fiber::Base
         false
       end
     }
-    fibs.each { |fib| fib.resume }
+    fibs.each(&:resume)
 
     max_sleep = 1.0 # wake up semi-frequently to prevent SIGKILL from master
     if max

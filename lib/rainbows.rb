@@ -11,8 +11,7 @@ module Rainbows
 
   # map of numeric file descriptors to IO objects to avoid using IO.new
   # and potentially causing race conditions when using /dev/fd/
-  FD_MAP = {}
-  FD_MAP.compare_by_identity if FD_MAP.respond_to?(:compare_by_identity)
+  FD_MAP = {}.compare_by_identity
 
   require 'rainbows/const'
   require 'rainbows/http_parser'
@@ -92,7 +91,7 @@ module Rainbows
       tmp = @readers.dup
       @readers.clear
       tmp.each { |s| s.close rescue nil }.clear
-      @at_quit.each { |task| task.call }
+      @at_quit.each(&:call)
 
       # XXX hack to break out of IO.select in worker_loop for some models
       Process.kill(:QUIT, $$)

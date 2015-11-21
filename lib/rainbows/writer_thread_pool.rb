@@ -50,9 +50,9 @@ module Rainbows::WriterThreadPool
       end
     end
 
-    @@q = qp.map { |q| q.queue }
+    @@q = qp.map(&:queue)
     super(worker) # accept loop from Unicorn
-    qp.each { |q| q.quit! }
+    qp.each(&:quit!)
   end
   # :startdoc:
 end

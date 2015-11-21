@@ -117,9 +117,9 @@ op = nil
 if $DEBUG
   require 'pp'
   pp({
-    :unicorn_options => options,
-    :app => app,
-    :daemonize => rackup_opts[:daemonize],
+    unicorn_options: options,
+    app: app,
+    daemonize: rackup_opts[:daemonize],
   })
 end
 

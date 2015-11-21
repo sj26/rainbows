@@ -27,15 +27,10 @@ require 'rainbows/coolio_support'
 module Rainbows::Coolio
   # :stopdoc:
   # keep-alive timeout scoreboard
-  KATO = {}
+  KATO = {}.compare_by_identity
 
   # all connected clients
-  CONN = {}
-
-  if {}.respond_to?(:compare_by_identity)
-    CONN.compare_by_identity
-    KATO.compare_by_identity
-  end
+  CONN = {}.compare_by_identity
 
   autoload :Client, 'rainbows/coolio/client'
   autoload :Master, 'rainbows/coolio/master'
