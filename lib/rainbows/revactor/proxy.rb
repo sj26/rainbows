@@ -22,7 +22,7 @@ class Rainbows::Revactor::Proxy < Rev::IO
     # (instead of Errno::EPIPE), so we need to limit the rescue
     # to just readpartial and let EOFErrors during yield bubble up
     begin
-      buf = readpartial(INPUT_SIZE)
+      buf = readpartial(16384)
     rescue EOFError
       break
     end while yield(buf) || true

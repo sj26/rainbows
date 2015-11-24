@@ -30,7 +30,7 @@ module Rainbows::ReverseProxy::EventMachine
     end
 
     def unbind
-      @env[AsyncCallback].call(@response || Rainbows::ReverseProxy::E502)
+      @env['async.callback'].call(@response || Rainbows::ReverseProxy::E502)
     end
   end
 
