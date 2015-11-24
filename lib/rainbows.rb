@@ -108,7 +108,7 @@ module Rainbows
     end
   rescue NameError, NoMethodError
     def self.now # Ruby <= 2.0
-      Rainbows.now
+      Time.now.to_f
     end
   end
 
