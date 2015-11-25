@@ -164,9 +164,10 @@ and we'll try our best to fix it.
 All feedback (bug reports, user/development discussion, patches, pull
 requests) go to the mailing list.  Patches must be sent inline
 (git format-patch -M + git send-email).  No subscription is necessary
-to post on the mailing list.  No top posting.  Address replies +To:+
-the mailing list.
+to post on the mailing list.  No top posting.
 
 * email: mailto:rainbows-public@bogomips.org
 * subscribe: mailto:rainbows-public+subscribe@bogomips.org
 * archives: http://bogomips.org/rainbows-public/
+  nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
+  nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general
