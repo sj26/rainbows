@@ -16,3 +16,6 @@ noindex:
 - EM
 - Revactor
 ml_url: http://bogomips.org/rainbows-public/
+nntp_url:
+  - nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
+  - nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general

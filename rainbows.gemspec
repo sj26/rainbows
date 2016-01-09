@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency(%q<unicorn>, ["~> 5.0"])
 
   s.add_development_dependency(%q<isolate>, "~> 3.1")
-  s.add_development_dependency(%q<olddoc>, "~> 1.0")
+  s.add_development_dependency(%q<olddoc>, "~> 1.2")
 
   # optional runtime dependencies depending on configuration
   # see t/test_isolate.rb for the exact versions we've tested with
