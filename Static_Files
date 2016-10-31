@@ -61,11 +61,3 @@ With large files and high-throughput clients, there should be little
 performance difference compared to optimal C implementation such as
 nginx and lighttpd.  Ruby runtime overhead matters more when serving
 slower clients and smaller files.
-
-== The Future...
-
-We'll also support an open file cache (similar to nginx) which
-allows us to reuse open file descriptors.
-
-Under Linux, we'll support the splice(2) system call for zero-copy
-proxying {io_splice}[http://bogomips.org/ruby_io_splice/], too.
