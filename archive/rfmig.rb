@@ -2,7 +2,7 @@
 require 'find'
 require 'fileutils'
 rfdir = 'rubyforge.org:/var/www/gforge-projects/rainbows/'
-newbase = 'http://rainbows.bogomips.org/'
+newbase = 'https://bogomips.org/rainbows/'
 refresh = '<meta http-equiv="refresh" content="0; url=%s" />'
 old = 'rf.old'
 new = 'rf.new'

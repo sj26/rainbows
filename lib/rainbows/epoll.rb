@@ -3,7 +3,7 @@ require 'sleepy_penguin'
 require 'sendfile'
 
 # Edge-triggered epoll concurrency model using
-# {sleepy_penguin}[http://bogomips.org/sleepy_penguin/] for epoll.
+# {sleepy_penguin}[https://bogomips.org/sleepy_penguin/] for epoll.
 #
 # Unlike more portable options like Coolio and EventMachine, this
 # is Linux-only, but uses edge-triggering instead of level-triggering,

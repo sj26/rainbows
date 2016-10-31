@@ -1,6 +1,6 @@
 = Tuning \Rainbows!
 
-Most of the {tuning notes}[http://unicorn.bogomips.org/TUNING.html]
+Most of the {tuning notes}[https://bogomips.org/unicorn/TUNING.html]
 apply to \Rainbows! as well.  \Rainbows! is not particularly optimized
 at the moment and is designed for applications that spend large amounts
 of the time waiting on network activity.  Thus memory usage and memory
@@ -26,7 +26,7 @@ never be the primary goal of the project.
   the kernel.
 
 * If your workers do not seem to be releasing memory to the OS after
-  traffic spikes, consider the {mall}[http://bogomips.org/mall/] library
+  traffic spikes, consider the {mall}[https://bogomips.org/mall/] library
   which allows access to the mallopt(3) function from Ruby. As of
   October 2009 tcmalloc (the default allocator for Ruby Enterprise
   Edition) does not release memory back to the kernel, the best it can

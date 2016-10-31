@@ -13,7 +13,7 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"http://bogomips.org/rainbows-public/m/$MESSAGE_ID" if possible since
+"https://bogomips.org/rainbows-public/<Message-ID>/" if possible since
 the Message-ID remains searchable even if the website becomes unavailable.
 
 == Contributing

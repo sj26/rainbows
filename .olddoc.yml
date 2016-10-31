@@ -1,7 +1,7 @@
 ---
-cgit_url: http://bogomips.org/rainbows.git
+cgit_url: https://bogomips.org/rainbows.git
 git_url: git://bogomips.org/rainbows.git
-rdoc_url: http://rainbows.bogomips.org/
+rdoc_url: https://bogomips.org/rainbows/
 merge_html:
   rainbows_1: Documentation/rainbows.1.html
   Summary: Documentation/comparison.html
@@ -15,7 +15,7 @@ noindex:
 - Unicorn::SocketHelper
 - EM
 - Revactor
-ml_url: http://bogomips.org/rainbows-public/
+ml_url: https://bogomips.org/rainbows-public/
 nntp_url:
   - nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
   - nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general

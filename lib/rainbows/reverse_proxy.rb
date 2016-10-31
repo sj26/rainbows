@@ -3,7 +3,7 @@
 require 'socket'
 require 'thread'
 require 'uri'
-require 'kcar' # http://bogomips.org/kcar/ -- gem install kcar
+require 'kcar' # https://bogomips.org/kcar/ -- gem install kcar
 
 # This is lightly tested and has an unstable configuration interface.
 # ***** Do not rely on anything under the ReverseProxy namespace! *****

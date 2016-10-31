@@ -5,7 +5,7 @@ unicorn, but designed to handle applications that expect long
 request/response times and/or slow clients.
 
 If you're on GNU/Linux and overwhelmed by options in \Rainbows!,
-consider {yahns}[http://yahns.yhbt.net/] as it has fewer options
+consider {yahns}[https://yhbt.net/yahns/] as it has fewer options
 and more energy-efficient during non-peak traffic and may also
 be configured as a single worker process.
 
@@ -51,7 +51,7 @@ network concurrency.
 * Designed for {Rack}[http://rack.github.io/], the standard for
   modern Ruby HTTP applications.
 
-* Built on {Unicorn}[http://unicorn.bogomips.org/], inheriting its
+* Built on {Unicorn}[https://bogomips.org/unicorn/], inheriting its
   process/socket management features such as transparent upgrades and
   Ruby configuration DSL.
 
@@ -117,7 +117,7 @@ In APP_ROOT (where config.ru is located), run:
 For deployments, it can use a config file for Unicorn and
 \Rainbows!-specific options specified by the +--config-file/-c+
 command-line switch.  \Rainbows! accepts all options found in
-{Unicorn::Configurator}[http://unicorn.bogomips.org/Unicorn/Configurator.html]
+{Unicorn::Configurator}[https://bogomips.org/unicorn/Unicorn/Configurator.html]
 as well as the "\Rainbows!" block, so you can have the following in your
 config file:
 
@@ -142,7 +142,7 @@ You can get the latest source via git from the following locations
 You may browse the code from the web and download the latest snapshot
 tarballs here:
 
-* http://bogomips.org/rainbows.git (cgit)
+* https://bogomips.org/rainbows.git
 * http://repo.or.cz/w/rainbows.git (gitweb)
 
 Inline patches (from "git format-patch") to the mailing list are
@@ -168,6 +168,6 @@ to post on the mailing list.  No top posting.
 
 * email: mailto:rainbows-public@bogomips.org
 * subscribe: mailto:rainbows-public+subscribe@bogomips.org
-* archives: http://bogomips.org/rainbows-public/
+* archives: https://bogomips.org/rainbows-public/
   nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
   nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general
