@@ -34,14 +34,15 @@ check_content_range () {
 }
 
 t_begin "read random blob sha1s" && {
-	sha1_head=$(curl -sSff $range_head file://random_blob | rsha1)
-	sha1_tail=$(curl -sSff $range_tail file://random_blob | rsha1)
-	sha1_mid=$(curl -sSff $range_mid file://random_blob | rsha1)
-	sha1_n1=$(curl -sSff $range_n1 file://random_blob | rsha1)
-	sha1_n2=$(curl -sSff $range_n2 file://random_blob | rsha1)
-	sha1_1b_head=$(curl -sSff $range_1b_head file://random_blob | rsha1)
-	sha1_1b_tail=$(curl -sSff $range_1b_tail file://random_blob | rsha1)
-	sha1_1b_mid=$(curl -sSff $range_1b_mid file://random_blob | rsha1)
+	file="file://$(pwd)/random_blob"
+	sha1_head=$(curl -sSff $range_head $file | rsha1)
+	sha1_tail=$(curl -sSff $range_tail $file | rsha1)
+	sha1_mid=$(curl -sSff $range_mid $file | rsha1)
+	sha1_n1=$(curl -sSff $range_n1 $file | rsha1)
+	sha1_n2=$(curl -sSff $range_n2 $file | rsha1)
+	sha1_1b_head=$(curl -sSff $range_1b_head $file | rsha1)
+	sha1_1b_tail=$(curl -sSff $range_1b_tail $file | rsha1)
+	sha1_1b_mid=$(curl -sSff $range_1b_mid $file | rsha1)
 	sha1_all=$(rsha1 < random_blob)
 	echo "$sha1_all=$sha1_n1"
 }
