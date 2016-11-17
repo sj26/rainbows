@@ -17,15 +17,18 @@ lock = File.open(__FILE__, "rb")
 lock.flock(File::LOCK_EX)
 Isolate.now!(opts) do
   gem 'kgio', '2.10.0'
-  gem 'rack', '1.6.4'
-  gem 'kcar', '0.5.0'
-  gem 'raindrops', '0.13.0'
-  gem 'unicorn', '5.0.1'
+  gem 'rack', '2.0.1'
+  gem 'kcar', '0.6.0'
+  gem 'raindrops', '0.17.0'
+  gem 'unicorn', '5.2.0'
 
   if engine == "ruby"
     gem 'sendfile', '1.2.2'
-    gem 'eventmachine', '1.0.8'
-    gem 'async_sinatra', '1.2.0'
+    gem 'eventmachine', '1.2.0.1'
+
+    # not compatible with rack 2.x
+    # gem 'async_sinatra', '1.2.1'
+
     if RUBY_VERSION.to_f < 2.2
       gem 'cool.io', '1.1.0'
       gem 'neverblock', '0.1.6.2'

@@ -19,15 +19,14 @@ Gem::Specification.new do |s|
   s.summary = summary
 
   # we want a newer Rack for a valid HeaderHash#each
-  s.add_dependency(%q<rack>, ['~> 1.1'])
+  s.add_dependency(%q<rack>, ['>= 1.1', '< 3.0'])
 
   # kgio 2.5 has kgio_wait_* methods that take optional timeout args
   s.add_dependency(%q<kgio>, ['~> 2.5'])
 
   # we need unicorn for the HTTP parser and process management
-  # we need unicorn 4.8.0+ since we depend on undocumented/unsupported
-  # unicorn internals.
-  s.add_dependency(%q<unicorn>, ["~> 5.0"])
+  # we need unicorn 5.1+ to relax the Rack dependency.
+  s.add_dependency(%q<unicorn>, ["~> 5.1"])
 
   s.add_development_dependency(%q<isolate>, "~> 3.1")
   s.add_development_dependency(%q<olddoc>, "~> 1.2")
