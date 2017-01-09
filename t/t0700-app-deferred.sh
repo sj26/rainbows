@@ -15,7 +15,7 @@ CONFIG_RU=app_deferred.ru
 t_begin "setup and start" && {
 	rainbows_setup
 	rtmpfiles deferred_err deferred_out sync_err sync_out
-	rainbows -D -c $unicorn_config $CONFIG_RU
+	fifo=$fifo rainbows -D -c $unicorn_config $CONFIG_RU
 	rainbows_wait_start
 }
 
@@ -36,8 +36,20 @@ t_begin "deferred requests run in a different thread" && {
 	test x"$(uniq < $deferred_out)" != x"$sync_thread"
 }
 
-t_begin "termination signal sent" && {
-	kill $rainbows_pid
+t_begin "deferred requests run after graceful shutdown" && {
+	# XXX sleeping 5s ought to be enough for SIGQUIT to arrive,
+	# hard to tell with overloaded systems...
+	s=5
+	curl -sSf --no-buffer http://$listen/deferred$s \
+		>$deferred_out 2>$deferred_err &
+	curl_pid=$!
+	msg="$(cat $fifo)"
+	kill -QUIT $rainbows_pid
+	test x"$msg" = x"sleeping ${s}s"
+	wait $curl_pid # for curl to finish
+	test $? -eq 0
+	test ! -s $deferred_err
+	test x"$(cat $deferred_out)" = 'xdeferred sleep'
 }
 
 t_begin "no errors in stderr" && check_stderr

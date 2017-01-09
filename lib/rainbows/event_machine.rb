@@ -65,6 +65,11 @@ module Rainbows::EventMachine
     end
   end
 
+  def defers_finished?
+    # EventMachine 1.0.0+ has defers_finished?
+    EM.respond_to?(:defers_finished?) ? EM.defers_finished? : true
+  end
+
   # runs inside each forked worker, this sits around and waits
   # for connections and doesn't die until the parent dies (or is
   # given a INT, QUIT, or TERM signal)
@@ -101,7 +106,10 @@ module Rainbows::EventMachine
         end
       end
       EM.add_periodic_timer(1) do
-        EM.stop if ! Rainbows.tick && conns.empty? && EM.reactor_running?
+        if ! Rainbows.tick && conns.empty? && defers_finished? &&
+            EM.reactor_running?
+          EM.stop
+        end
       end
       LISTENERS.map! do |s|
         EM.watch(s, Rainbows::EventMachine::Server) do |c|
