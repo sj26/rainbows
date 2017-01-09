@@ -41,6 +41,7 @@ ifeq ($(RUBY_ENGINE),ruby)
     endif
     models += FiberSpawn
     models += FiberPool
+    models += EventMachine
 
     RUBY_LE_2_1 := $(shell $(RUBY) -e 'puts(RUBY_VERSION.to_f <= 2.1)')
     ifeq ($(RUBY_LE_2_1), true)
@@ -48,7 +49,6 @@ ifeq ($(RUBY_ENGINE),ruby)
       models += CoolioThreadPool
       models += CoolioThreadSpawn
       models += CoolioFiberSpawn
-      models += EventMachine
       models += NeverBlock
     endif
   endif
