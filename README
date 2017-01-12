@@ -159,6 +159,15 @@ don't email the git mailing list or maintainer with \Rainbows! patches.
 There is NO WARRANTY whatsoever if anything goes wrong, but let us know
 and we'll try our best to fix it.
 
+Rainbows! is extremely sensitive to fatal bugs in the apps it hosts.
+Each Rainbows! worker process may be handling thousands of clients;
+unexpectedly killing the process will abort _all_ of those
+connections.  Lives may be lost!
+
+Rainbows! hackers are not responsible for your application/library bugs.
+Use an application server which is tolerant of buggy applications
+if you cannot be bothered to fix all your fatal bugs.
+
 == Contact
 
 All feedback (bug reports, user/development discussion, patches, pull

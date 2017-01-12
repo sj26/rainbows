@@ -6,6 +6,11 @@
 # block, otherwise Unicorn::Configurator directives may be used anywhere
 # in the file.
 #
+# Warning: The "timeout" directive in unicorn is far more dangerous
+# in Rainbows!, since ALL requests running on a process will be lost
+# on worker death, not just one.  Instead, handle application-level
+# timeouts yourself: https://bogomips.org/unicorn/Application_Timeouts.html
+#
 #   Rainbows! do
 #     use :ThreadSpawn # concurrency model to use
 #     worker_connections 400
