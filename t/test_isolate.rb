@@ -19,8 +19,8 @@ Isolate.now!(opts) do
   gem 'kgio', '2.11.0'
   gem 'rack', '2.0.1'
   gem 'kcar', '0.6.0'
-  gem 'raindrops', '0.17.0'
-  gem 'unicorn', '5.2.0'
+  gem 'raindrops', '0.18.0'
+  gem 'unicorn', '5.3.0'
 
   if engine == "ruby"
     gem 'sendfile', '1.2.2'
