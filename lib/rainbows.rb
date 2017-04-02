@@ -149,3 +149,12 @@ end
 
 require 'rainbows/error'
 require 'rainbows/configurator'
+
+module Unicorn
+  # this interferes with Rainbows::Client creation with unicorn 5.3
+  begin
+    remove_const :TCPSrv
+    TCPSrv = Kgio::TCPServer
+  rescue NameError # unicorn < 5.3.0
+  end
+end
