@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-DEF_VER = "v5.1.0"
+DEF_VER = "v5.1.1"
 CONSTANT = "Rainbows::Const::RAINBOWS_VERSION"
 RVF = "lib/rainbows/version.rb"
 GVF = "GIT-VERSION-FILE"
