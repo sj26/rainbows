@@ -16,11 +16,11 @@ $stdout.reopen($stderr)
 lock = File.open(__FILE__, "rb")
 lock.flock(File::LOCK_EX)
 Isolate.now!(opts) do
-  gem 'kgio', '2.11.0'
-  gem 'rack', '2.0.1'
+  gem 'kgio', '2.11.2'
+  gem 'rack', '2.0.6'
   gem 'kcar', '0.6.0'
-  gem 'raindrops', '0.18.0'
-  gem 'unicorn', '5.3.0'
+  gem 'raindrops', '0.19.0'
+  gem 'unicorn', '5.4.1'
 
   if engine == "ruby"
     gem 'sendfile', '1.2.2'
@@ -43,7 +43,7 @@ Isolate.now!(opts) do
   end
 
   if RUBY_PLATFORM =~ /linux/
-    gem 'sleepy_penguin', '3.4.1'
+    gem 'sleepy_penguin', '3.5.1'
 
     # is 2.6.32 new enough?
     gem 'io_splice', '4.4.0' if `uname -r`.strip > '2.6.32'
