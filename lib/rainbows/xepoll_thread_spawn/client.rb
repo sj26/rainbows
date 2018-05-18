@@ -84,8 +84,8 @@ module Rainbows::XEpollThreadSpawn::Client
 
   def handle_error(e)
     super
-    ensure
-      closed? or close
+  ensure
+    closed? or close
   end
 
   def epoll_run(buf)
@@ -98,8 +98,8 @@ module Rainbows::XEpollThreadSpawn::Client
     else
       return close
     end while true
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   def spawn(env, hp)

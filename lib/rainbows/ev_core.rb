@@ -43,8 +43,8 @@ module Rainbows::EvCore
 
   def handle_error(e)
     msg = Rainbows::Error.response(e) and write(msg)
-    ensure
-      quit
+  ensure
+    quit
   end
 
   # returns whether to enable response chunking for autochunk models
@@ -119,8 +119,8 @@ module Rainbows::EvCore
         want_more
       end
     end
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   def err_413(msg)

@@ -91,8 +91,8 @@ module Rainbows::Response
       body = write_headers(status, headers, alive, body)
       write_body_each(body) if body
       body
-      ensure
-        body.close if body.respond_to?(:close)
+    ensure
+      body.close if body.respond_to?(:close)
     end
   end
   include Each
@@ -102,8 +102,8 @@ module Rainbows::Response
       def write_body_file(body, range)
         io = body_to_io(body)
         range ? sendfile(io, range[0], range[1]) : sendfile(io, 0)
-        ensure
-          close_if_private(io)
+      ensure
+        close_if_private(io)
       end
     end
     include Sendfile
@@ -129,8 +129,8 @@ module Rainbows::Response
     # isn't used or available.
     def write_body_stream(body)
       COPY_STREAM.copy_stream(io = body_to_io(body), self)
-      ensure
-        close_if_private(io)
+    ensure
+      close_if_private(io)
     end
   else # ! COPY_STREAM
     alias write_body_stream write_body_each
@@ -199,8 +199,8 @@ module Rainbows::Response
         write_body_stream(body) if body
       end
       body
-      ensure
-        body.close if body.respond_to?(:close)
+    ensure
+      body.close if body.respond_to?(:close)
     end
 
     module ToPath

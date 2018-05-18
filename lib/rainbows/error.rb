@@ -8,18 +8,18 @@ module Rainbows::Error
   # the socket is closed at the end of this function
   def self.write(io, e)
     msg = response(e) and Kgio.trywrite(io, msg)
-    rescue
+  rescue
   end
 
   def self.app(e)
     Unicorn.log_error(Rainbows.server.logger, "app error", e)
-    rescue
+  rescue
   end
 
   def self.listen_loop(e)
     Rainbows.alive or return
     Unicorn.log_error(Rainbows.server.logger, "listen loop error", e)
-    rescue
+  rescue
   end
 
   def self.response(e)

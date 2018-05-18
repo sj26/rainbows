@@ -34,7 +34,7 @@ class Rainbows::Revactor::Client::TeeSocket
     # ugh, read returned too much
     @rbuf << tmp[length, tmp.size]
     dst.replace(tmp[0, length])
-    rescue EOFError
+  rescue EOFError
   end
 
   # just proxy any remaining methods TeeInput may use

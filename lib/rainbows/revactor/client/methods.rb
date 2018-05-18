@@ -26,8 +26,8 @@ module Rainbows::Revactor::Client::Methods
       else # nil
         return
       end while true
-      ensure
-        close_if_private(body)
+    ensure
+      close_if_private(body)
     end
   end
 

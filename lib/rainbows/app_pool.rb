@@ -97,7 +97,7 @@ class Rainbows::AppPool < Struct.new(:pool, :re)
 
     app = pool.shift
     app.call(env)
-    ensure
-      pool << app
+  ensure
+    pool << app
   end
 end

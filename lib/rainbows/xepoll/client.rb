@@ -40,8 +40,8 @@ module Rainbows::XEpoll::Client
     @wr_queue = [] # may contain String, ResponsePipe, and StreamFile objects
     post_init
     EP.set(self, IN) # wake up the main thread
-    rescue => e
-      Rainbows::Error.write(self, e)
+  rescue => e
+    Rainbows::Error.write(self, e)
   end
 
   def on_close

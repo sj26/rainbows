@@ -39,8 +39,8 @@ module Rainbows::Epoll::Client
     @wr_queue = [] # may contain String, ResponsePipe, and StreamFile objects
     post_init
     on_readable
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   def on_readable
@@ -56,9 +56,9 @@ module Rainbows::Epoll::Client
       break
     end until :close == @state
     close unless closed?
-    rescue Errno::ECONNRESET
-      close
-    rescue IOError
+  rescue Errno::ECONNRESET
+    close
+  rescue IOError
   end
 
   def app_call input # called by on_read()
@@ -146,8 +146,8 @@ module Rainbows::Epoll::Client
 
   def handle_error(e)
     msg = Rainbows::Error.response(e) and kgio_trywrite(msg) rescue nil
-    ensure
-      close
+  ensure
+    close
   end
 
   def write_deferred(obj)
@@ -171,8 +171,8 @@ module Rainbows::Epoll::Client
     when :deferred
       return
     end while true
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   def write(buf)
@@ -227,9 +227,9 @@ module Rainbows::Epoll::Client
     else
       return n # :wait_writable or nil
     end while true
-    rescue
-      sf.close
-      raise
+  rescue
+    sf.close
+    raise
   end
 
   def defer_file_stream(offset, count, io, body)
@@ -263,8 +263,8 @@ module Rainbows::Epoll::Client
     else # nil => EOF
       return pipe.close # nil
     end while true
-    rescue
-      pipe.close
-      raise
+  rescue
+    pipe.close
+    raise
   end
 end

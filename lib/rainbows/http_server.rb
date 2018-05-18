@@ -71,10 +71,10 @@ class Rainbows::HttpServer < Unicorn::HttpServer
       @logger.warn "#{svc} may monopolize resources dictated by #{resource}" \
                    " and leave none for your app"
     end
-    rescue => e
-      @logger.error e.message
-      @logger.error "#{resource} needs to be increased to >=#{want} before" \
-                    " starting #{svc}"
+  rescue => e
+    @logger.error e.message
+    @logger.error "#{resource} needs to be increased to >=#{want} before" \
+                  " starting #{svc}"
   end
 
   def svc

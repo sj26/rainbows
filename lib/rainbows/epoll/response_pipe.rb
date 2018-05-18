@@ -14,9 +14,9 @@ class Rainbows::Epoll::ResponsePipe
   def epoll_run
     return close if @client.closed?
     @client.stream_pipe(self) or @client.on_deferred_write_complete
-    rescue => e
-      close
-      @client.handle_error(e)
+  rescue => e
+    close
+    @client.handle_error(e)
   end
 
   def close

@@ -83,8 +83,8 @@ module Rainbows::ProcessClient
       write_response(status, headers, body, alive = hp.next?) or return
     end while alive && pipeline_ready(hp)
     alive or close
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   # override this in subclass/module

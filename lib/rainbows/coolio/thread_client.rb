@@ -16,8 +16,8 @@ class Rainbows::Coolio::ThreadClient < Rainbows::Coolio::Client
   def response_write(response)
     return hijacked if @hp.hijacked?
     ev_write_response(*response, @hp.next?)
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   # fails-safe application dispatch, we absolutely cannot

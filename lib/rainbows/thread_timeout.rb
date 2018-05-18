@@ -134,11 +134,11 @@ class Rainbows::ThreadTimeout
       @lock.synchronize { @active.delete(Thread.current) }
       # Thread#raise no longer possible here
     end
-    rescue ExecutionExpired
-      # If we got here, it's because the watchdog thread raised an exception
-      # here to kill us.  The watchdog uses @active.delete_if with a lock,
-      # so we guaranteed it's
-      [ 408, { 'Content-Type' => 'text/plain', 'Content-Length' => '0' }, [] ]
+  rescue ExecutionExpired
+    # If we got here, it's because the watchdog thread raised an exception
+    # here to kill us.  The watchdog uses @active.delete_if with a lock,
+    # so we guaranteed it's
+    [ 408, { 'Content-Type' => 'text/plain', 'Content-Length' => '0' }, [] ]
   end
 
   # The watchdog thread is the one that does the job of killing threads

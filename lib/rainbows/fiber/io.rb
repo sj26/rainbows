@@ -37,8 +37,8 @@ class Rainbows::Fiber::IO
     buf = readpartial(16384)
     yield buf
     yield buf while readpartial(16384, buf)
-    rescue EOFError
-      self
+  rescue EOFError
+    self
   end
 
   def closed?

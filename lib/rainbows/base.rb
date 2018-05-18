@@ -49,8 +49,8 @@ module Rainbows::Base
     logger.info "worker=#{worker_nr} reopening logs..."
     Unicorn::Util.reopen_logs
     logger.info "worker=#{worker_nr} done reopening logs"
-    rescue
-      Rainbows.quit! # let the master reopen and refork us
+  rescue
+    Rainbows.quit! # let the master reopen and refork us
   end
   # :startdoc:
 end

@@ -18,7 +18,7 @@ app = lambda do |env|
       end while input.read(rand(cap), buf)
     end
   when "/each"
-    input.each { |buf| digest.update(buf) }
+    input.each { |chunk| digest.update(chunk) }
   else
     if buf = input.read(rand(cap))
       begin

@@ -47,9 +47,9 @@ class Rainbows::StreamResponseEpoll::Client
     when :wait_writable
       return @wr_queue.unshift(buf)
     end while true
-    rescue => err
-      @to_io.close
-      N.decr(0, 1)
+  rescue
+    @to_io.close
+    N.decr(0, 1)
   end
 
   def on_write_complete

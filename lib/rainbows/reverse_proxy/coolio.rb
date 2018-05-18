@@ -36,17 +36,17 @@ module Rainbows::ReverseProxy::Coolio
         return close
       end while true # we always read until EAGAIN or EOF
 
-      rescue => e
-        case e
-        when Errno::ECONNRESET
-          @env['async.callback'].call(@response)
-          return close
-        when SystemCallError
-        else
-          Unicorn.log_error(@env["rack.logger"], "on_readable", e)
-        end
-        @env['async.callback'].call(Rainbows::ReverseProxy::E502)
-        close
+    rescue => e
+      case e
+      when Errno::ECONNRESET
+        @env['async.callback'].call(@response)
+        return close
+      when SystemCallError
+      else
+        Unicorn.log_error(@env["rack.logger"], "on_readable", e)
+      end
+      @env['async.callback'].call(Rainbows::ReverseProxy::E502)
+      close
     end
   end
 

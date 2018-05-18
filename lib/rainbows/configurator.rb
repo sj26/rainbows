@@ -46,8 +46,8 @@ module Rainbows::Configurator
     block_given? or raise ArgumentError, "Rainbows! requires a block"
     @block = true
     instance_eval(&block)
-    ensure
-      @block = false
+  ensure
+    @block = false
   end
 
   def check! # :nodoc:

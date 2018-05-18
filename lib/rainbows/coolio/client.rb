@@ -160,8 +160,8 @@ class Rainbows::Coolio::Client < Coolio::IO
         on_read(''.freeze)
       end
     end
-    rescue => e
-      handle_error(e)
+  rescue => e
+    handle_error(e)
   end
 
   def handle_error(e)
@@ -170,8 +170,8 @@ class Rainbows::Coolio::Client < Coolio::IO
       @_io.kgio_trywrite(msg) rescue nil
     end
     @_write_buffer.clear
-    ensure
-      quit
+  ensure
+    quit
   end
 
   def close_deferred
