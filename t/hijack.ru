@@ -46,7 +46,7 @@ run lambda { |env|
       {
         "Content-Length" => r.bytesize.to_s,
         "rack.hijack" => proc do |sock|
-          io.write(r)
+          sock.write(r)
           lazy_close(sock)
         end
       },
