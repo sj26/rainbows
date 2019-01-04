@@ -1,22 +1,21 @@
 # -*- encoding: binary -*-
-ENV["VERSION"] or abort "VERSION= must be specified"
-manifest = File.readlines('.manifest').map! { |x| x.chomp! }
-require 'olddoc'
-extend Olddoc::Gemspec
-name, summary, title = readme_metadata
+manifest = File.exist?('.manifest') ?
+  IO.readlines('.manifest').map!(&:chomp!) : `git ls-files`.split("\n")
 
 Gem::Specification.new do |s|
   s.name = %q{rainbows}
-  s.version = ENV["VERSION"].dup
+  s.version = (ENV["VERSION"] || '5.1.1').dup
 
-  s.authors = ["#{name} hackers"]
-  s.description = readme_description
+  s.authors = ['Rainbows! hackers']
+  s.description = File.read('README').split("\n\n")[1]
   s.email = %q{rainbows-public@bogomips.org}
   s.executables = %w(rainbows)
-  s.extra_rdoc_files = extra_rdoc_files(manifest)
+  s.extra_rdoc_files = IO.readlines('.document').map!(&:chomp!).keep_if do |f|
+    File.exist?(f)
+  end
   s.files = manifest
-  s.homepage = Olddoc.config['rdoc_url']
-  s.summary = summary
+  s.homepage = 'https://bogomips.org/rainbows/'
+  s.summary = 'Rack app server for sleepy apps and slow clients'
 
   # we want a newer Rack for a valid HeaderHash#each
   s.add_dependency(%q<rack>, ['>= 1.1', '< 3.0'])
@@ -29,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency(%q<unicorn>, ["~> 5.1"])
 
   s.add_development_dependency(%q<isolate>, "~> 3.1")
-  s.add_development_dependency(%q<olddoc>, "~> 1.2")
 
   # optional runtime dependencies depending on configuration
   # see t/test_isolate.rb for the exact versions we've tested with
@@ -58,5 +56,14 @@ Gem::Specification.new do |s|
   # We cannot automatically switch licenses when Ruby changes their license,
   # so we remain optionally-licensed under the terms of Ruby 1.8 despite
   # not having a good way to specify this in an SPDX-compatible way...
-  s.licenses = ['GPL-2.0+', 'Nonstandard'] # Nonstandard = 'Ruby 1.8'
+  ruby_1_8 = 'Nonstandard'
+  s.licenses = [ 'GPL-2.0+', ruby_1_8 ]
+  s.metadata = {
+    'bug_tracker_uri' => 'https://bogomips.org/rainbows/#label-Contact',
+    'changelog_uri' => 'https://bogomips.org/rainbows/NEWS.html',
+    'documentation_uri' => 'https://bogomips.org/rainbows/',
+    'homepage_uri' => 'https://bogomips.org/rainbows/',
+    'mailing_list_uri' => 'https://bogomips.org/rainbows-public/',
+    'source_code_uri' => 'https://bogomips.org/rainbows.git',
+  }
 end

@@ -1,4 +1,4 @@
-= Rainbows! - unicorn for sleepy apps and slow clients
+= Rainbows! - Rack app server for sleepy apps and slow clients
 
 \Rainbows! is an HTTP server for sleepy Rack applications.  It is based on
 unicorn, but designed to handle applications that expect long
@@ -51,7 +51,7 @@ network concurrency.
 * Designed for {Rack}[http://rack.github.io/], the standard for
   modern Ruby HTTP applications.
 
-* Built on {Unicorn}[https://bogomips.org/unicorn/], inheriting its
+* Built on {unicorn}[https://bogomips.org/unicorn/], inheriting its
   process/socket management features such as transparent upgrades and
   Ruby configuration DSL.
 
@@ -81,7 +81,6 @@ network concurrency.
 * HTTP server push
 * Long polling
 * Reverse AJAX
-* real-time upload processing (via {upr}[http://upr.bogomips.org/])
 
 \Rainbows! can also be used to service slow clients directly even with
 fast applications.
@@ -123,7 +122,7 @@ config file:
 
     worker_processes 4 # assuming four CPU cores
     Rainbows! do
-      use :FiberSpawn
+      use :ThreadSpawn
       worker_connections 100
     end
 
@@ -136,23 +135,24 @@ for more details.
 You can get the latest source via git from the following locations
 (these versions may not be stable):
 
-  git://bogomips.org/rainbows.git
-  git://repo.or.cz/rainbows.git (mirror)
+  https://bogomips.org/rainbows.git
+  https://repo.or.cz/rainbows.git (mirror)
 
 You may browse the code from the web and download the latest snapshot
 tarballs here:
 
 * https://bogomips.org/rainbows.git
-* http://repo.or.cz/w/rainbows.git (gitweb)
+* https://repo.or.cz/rainbows.git (gitweb)
 
 Inline patches (from "git format-patch") to the mailing list are
 preferred because they allow code review and comments in the reply to
 the patch.
 
 We will adhere to mostly the same conventions for patch submissions as
-git itself.  See the Documentation/SubmittingPatches document
-distributed with git on on patch submission guidelines to follow.  Just
-don't email the git mailing list or maintainer with \Rainbows! patches.
+git itself.  See the
+https://80x24.org/mirrors/git.git/tree/Documentation/SubmittingPatches?h=v2.20.1
+document distributed with git on on patch submission guidelines to follow.
+Just don't email the git mailing list or maintainer with \Rainbows! patches.
 
 == Disclaimer
 

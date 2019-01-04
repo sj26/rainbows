@@ -1,6 +1,6 @@
 ---
 cgit_url: https://bogomips.org/rainbows.git
-git_url: git://bogomips.org/rainbows.git
+git_url: https://bogomips.org/rainbows.git
 rdoc_url: https://bogomips.org/rainbows/
 merge_html:
   rainbows_1: Documentation/rainbows.1.html

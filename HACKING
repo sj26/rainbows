@@ -44,12 +44,12 @@ Please Cc: everyone on replies, as not everyone is subscribed.
 
 == Building a Gem
 
-In order to build the gem, you must install the following components:
+In order to build the gem, you must install the following components
+for documentation:
 
- * olddoc (RubyGem)
  * pandoc
 
-You can build the Unicorn gem with the following command:
+You can build the Rainbows! gem with the following command:
 
   gmake gem
 
