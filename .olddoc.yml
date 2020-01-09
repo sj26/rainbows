@@ -2,7 +2,7 @@
 cgit_url: https://yhbt.net/rainbows.git/
 rdoc_url: https://yhbt.net/rainbows/
 merge_html:
-  rainbows_1: Documentation/rainbows.1.html
+  rainbows_1: man/man1/rainbows.1.html
   Summary: Documentation/comparison.html
 public_email: rainbows-public@yhbt.net
 noindex:

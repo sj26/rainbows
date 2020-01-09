@@ -4,28 +4,27 @@ RSYNC_DEST := yhbt.net:/srv/yhbt/rainbows
 rfpackage := rainbows
 PLACEHOLDERS := rainbows_1 Summary
 
-man-rdoc: man html
-	$(MAKE) -C Documentation comparison.html
-doc:: man-rdoc
-include pkg.mk
+Documentation/comparison.html: Documentation/comparison.haml
+	haml < $< >$@+ && mv $@+ $@
 
-base_bins := rainbows
-bins := $(addprefix bin/, $(base_bins))
-man1_bins := $(addsuffix .1, $(base_bins))
-man1_paths := $(addprefix man/man1/, $(man1_bins))
+# only for the website
+doc :: Documentation/comparison.html
+doc :: man/man1/rainbows.1.html
+
+include pkg.mk
+man1 := man/man1/rainbows.1
 
 clean:
 	-$(MAKE) -C Documentation clean
+	$(RM) $(man1) $(html1)
 
-man html:
-	$(MAKE) -C Documentation install-$@
+pkg_extra += $(man1) lib/rainbows/version.rb
 
-pkg_extra += $(man1_paths) lib/rainbows/version.rb
+%.1.html: %.1
+	$(OLDDOC) man2html -o $@ $<
 
 lib/rainbows/version.rb: GIT-VERSION-FILE
 
 all:: test
 test: lib/rainbows/version.rb
 	$(MAKE) -C t
-
-.PHONY: man html
