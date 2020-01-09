@@ -82,7 +82,7 @@ unicorn code), some things are not:
   to different worker processes, and if your listen() +:backlog+ is
   overflowing: to other machines in your cluster.
 
-* Accepts the same {signals}[https://bogomips.org/unicorn/SIGNALS.html]
+* Accepts the same {signals}[https://yhbt.net/unicorn/SIGNALS.html]
   for process management, so you can share scripts to manage them (and
   nginx, too).
 

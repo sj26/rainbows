@@ -8,13 +8,13 @@ Gem::Specification.new do |s|
 
   s.authors = ['Rainbows! hackers']
   s.description = File.read('README').split("\n\n")[1]
-  s.email = %q{rainbows-public@bogomips.org}
+  s.email = %q{rainbows-public@yhbt.net}
   s.executables = %w(rainbows)
   s.extra_rdoc_files = IO.readlines('.document').map!(&:chomp!).keep_if do |f|
     File.exist?(f)
   end
   s.files = manifest
-  s.homepage = 'https://bogomips.org/rainbows/'
+  s.homepage = 'https://yhbt.net/rainbows/'
   s.summary = 'Rack app server for sleepy apps and slow clients'
 
   # we want a newer Rack for a valid HeaderHash#each
@@ -59,11 +59,11 @@ Gem::Specification.new do |s|
   ruby_1_8 = 'Nonstandard'
   s.licenses = [ 'GPL-2.0+', ruby_1_8 ]
   s.metadata = {
-    'bug_tracker_uri' => 'https://bogomips.org/rainbows/#label-Contact',
-    'changelog_uri' => 'https://bogomips.org/rainbows/NEWS.html',
-    'documentation_uri' => 'https://bogomips.org/rainbows/',
-    'homepage_uri' => 'https://bogomips.org/rainbows/',
-    'mailing_list_uri' => 'https://bogomips.org/rainbows-public/',
-    'source_code_uri' => 'https://bogomips.org/rainbows.git',
+    'bug_tracker_uri' => 'https://yhbt.net/rainbows/#label-Contact',
+    'changelog_uri' => 'https://yhbt.net/rainbows/NEWS.html',
+    'documentation_uri' => 'https://yhbt.net/rainbows/',
+    'homepage_uri' => 'https://yhbt.net/rainbows/',
+    'mailing_list_uri' => 'https://yhbt.net/rainbows-public/',
+    'source_code_uri' => 'https://yhbt.net/rainbows.git',
   }
 end

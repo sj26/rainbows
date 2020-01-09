@@ -64,7 +64,7 @@ requires a extra {patch}[http://haproxy.1wt.eu/download/patches/].
 If you don't need streaming "rack.input", then nginx is a great HTTPS
 reverse proxy.
 
-Refer to the {unicorn FAQ}[https://bogomips.org/unicorn/FAQ.html] on how
+Refer to the {unicorn FAQ}[https://yhbt.net/unicorn/FAQ.html] on how
 to ensure redirects go to "https://" URLs.
 
 

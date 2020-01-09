@@ -1,12 +1,10 @@
 ---
-cgit_url: https://bogomips.org/rainbows.git
-git_url: https://bogomips.org/rainbows.git
-rdoc_url: https://bogomips.org/rainbows/
+cgit_url: https://yhbt.net/rainbows.git/
+rdoc_url: https://yhbt.net/rainbows/
 merge_html:
   rainbows_1: Documentation/rainbows.1.html
   Summary: Documentation/comparison.html
-public_email: rainbows-public@bogomips.org
-private_email: rainbows@bogomips.org
+public_email: rainbows-public@yhbt.net
 noindex:
 - TODO
 - LATEST
@@ -15,7 +13,13 @@ noindex:
 - Unicorn::SocketHelper
 - EM
 - Revactor
-ml_url: https://bogomips.org/rainbows-public/
+ml_url:
+- https://yhbt.net/rainbows-public/
+- http://ou63pmih66umazou.onion/rainbows-public/
+source_code:
+- git clone https://yhbt.net/rainbows.git
+- torsocks git clone http://ou63pmih66umazou.onion/rainbows.git
 nntp_url:
-  - nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
-  - nntp://news.gmane.org/gmane.comp.lang.ruby.rainbows.general
+- nntp://news.public-inbox.org/inbox.comp.lang.ruby.rainbows
+- nntp://ou63pmih66umazou.onion/inbox.comp.lang.ruby.rainbows
+- nntp://news.gmane.io/gmane.comp.lang.ruby.rainbows.general

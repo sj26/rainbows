@@ -1,5 +1,5 @@
 % rainbows(1) Rainbows! User Manual
-% Rainbows! Hackers <rainbows-public@bogomips.org>
+% Rainbows! Hackers <rainbows-public@yhbt.net>
 % December 3, 2009
 
 # NAME
@@ -155,7 +155,7 @@ RACKUP_FILE, some frameworks do not require them.
 * [Rack RDoc][2]
 * [Rackup HowTo][3]
 
-[1]: https://bogomips.org/rainbows/
+[1]: https://yhbt.net/rainbows/
 [2]: http://rdoc.info/gems/r#/gems/rack/frames
 [3]: http://wiki.github.com/rack/rack/tutorial-rackup-howto
-[4]: https://bogomips.org/rainbows/SIGNALS.html
+[4]: https://yhbt.net/rainbows/SIGNALS.html

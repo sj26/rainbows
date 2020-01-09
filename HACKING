@@ -13,7 +13,7 @@ Please wrap documentation at 72 characters-per-line or less (long URLs
 are exempt) so it is comfortably readable from terminals.
 
 When referencing mailing list posts, use
-"https://bogomips.org/rainbows-public/<Message-ID>/" if possible since
+"https://yhbt.net/rainbows-public/<Message-ID>/" if possible since
 the Message-ID remains searchable even if the website becomes unavailable.
 
 == Contributing
@@ -38,7 +38,7 @@ distributed with git on on patch submission guidelines to follow.  Just
 don't email the git mailing list or maintainer with Rainbows! patches :)
 
 No subscription is required to post to the mailing list at
-rainbows-public@bogomips.org
+rainbows-public@yhbt.net
 
 Please Cc: everyone on replies, as not everyone is subscribed.
 
